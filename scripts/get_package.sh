@@ -1,7 +1,7 @@
 #!/bin/bash
 # Define the source directory
 SOURCE_DIR="/sources"
-REPO_URL="https://raw.githubusercontent.com/n1cef/kraken"
+REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
  pkgname="$1"
 
 # Function to download the package
@@ -28,7 +28,7 @@ REPO_URL="https://raw.githubusercontent.com/n1cef/kraken"
     fi
 
     # Search the repository for the PKGBUILD file corresponding to the package
-    pkgbuild_url="${REPO_URL}/refs/heads/master/pkgbuilds/$pkgname/pkgbuild.kraken"
+    pkgbuild_url="${REPO_URL}/refs/heads/main/pkgbuilds/$pkgname/pkgbuild.kraken"
 
     echo "Fetching PKGBUILD for $pkgname from repo..."
     wget -q -P "$SOURCE_DIR/$pkgname" "$pkgbuild_url"

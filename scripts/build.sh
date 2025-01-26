@@ -2,7 +2,7 @@
 
 # Define the source directory
 SOURCE_DIR="/sources"
-REPO_URL="https://raw.githubusercontent.com/n1cef/kraken"
+REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
  
 
 

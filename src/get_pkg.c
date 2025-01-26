@@ -7,7 +7,7 @@
 
 char **get_pkg (const char *pkg_name,int *nbr_dep){
 const char *SOURCE_DIR="/sources";
-const char *REPO_URL="https://raw.githubusercontent.com/n1cef/kraken";
+const char *REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository";
 char PKG_DIR[256];
 if(opendir(SOURCE_DIR)== NULL){
 
@@ -40,7 +40,7 @@ if (chown(PKG_DIR,getuid(),getgid())== -1 ) {perror("erro changing ownership of 
 
 char pkgbuild_url[512]; 
 
-snprintf(pkgbuild_url,sizeof(pkgbuild_url),"%s/refs/heads/master/pkgbuilds/%s/pkgbuild.kraken",REPO_URL,pkg_name);
+snprintf(pkgbuild_url,sizeof(pkgbuild_url),"%s/refs/heads/main/pkgbuilds/%s/pkgbuild.kraken",REPO_URL,pkg_name);
  printf("pkgfile usr is %s\n",pkgbuild_url);
 
 
