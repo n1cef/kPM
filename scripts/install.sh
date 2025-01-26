@@ -24,7 +24,7 @@ if [ ! -d "$metadata_dir" ]; then
  
   
 # Call fake install to cappture the dirs and files maked by this package
-    source /home/pkg/kraken/scripts/fake_install.sh
+    source /home/pkg/kraken_package_manager/scripts/fake_install.sh
     if !fake_inst "$pkgname"; then
     echo "error in  fake install "
         
@@ -41,13 +41,13 @@ if [ ! -d "$metadata_dir" ]; then
         # Ensure the function is loaded in the shell
         if ! declare -f kraken_install > /dev/null; then
             echo "ERROR: Failed to load kraken_install function."
-            return 1
+            exit 1
         fi
 
         # Execute the kraken_prepare function
         if ! kraken_install ; then
             echo "ERROR: Failed to execute kraken_install for package $pkgname."
-            return 1
+            exit 1
         fi
 
         echo "kraken_install executed successfully for package $pkgname. "

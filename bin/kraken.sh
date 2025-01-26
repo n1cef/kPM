@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-SCRIPTS_DIR="../scripts"
+SCRIPTS_DIR="/home/pkg/kraken_package_manager/scripts"
 
 get_package(){
 
@@ -24,6 +24,13 @@ build(){
  bash "$SCRIPTS_DIR/build.sh" "$pkg_name"
 
 
+
+}
+
+test(){
+
+local pkgname="$1"
+ bash "$SCRIPTS_DIR/test.sh" "$pkg_name"
 
 }
 
@@ -69,6 +76,9 @@ case "$command" in
     
     build)
     build "$pkg_name"
+    ;;
+    test)
+    test "$pkg_name"
     ;;
     preinstall)
      preinstall "$pkg_name"

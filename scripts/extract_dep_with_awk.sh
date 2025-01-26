@@ -13,7 +13,7 @@ if [[ ! -f "$SOURCE_DIR/$pkgname/pkgbuild.kraken" ]]; then
 
         echo "File not found: $SOURCE_DIR/$pkgname/pkgbuild.kraken" >&2
 
-        return 1
+        exit 1
 
     fi
 
@@ -24,7 +24,7 @@ if [[ ${#deps[@]} -eq 0 ]]; then
 
         echo "No dependencies found for package: $pkgname"
 
-        return 1
+        exit 1
 
     fi
 

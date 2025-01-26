@@ -9,7 +9,7 @@ REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
     # Ensure the user provided a package name
     if [ -z "$1" ]; then
         echo "ERROR: You must specify a package name."
-        return 1
+        exit 1
     fi
 
     # Package name passed by user
@@ -61,7 +61,7 @@ REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
         # Check if the downloaded checksum matches the expected checksum
         if [ "$downloaded_checksum" != "$checksum" ]; then 
             echo "ERROR: Checksum verification failed for $tarball_name."
-            return 1
+            exit 1
         else
             echo "Checksum verification successful for $tarball_name."
         fi

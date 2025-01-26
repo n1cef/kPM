@@ -2,6 +2,7 @@
 #include"../include/dependency.h"
 #include"../include/graph.h"
 #include<stdio.h>
+#include<stdlib.h>
 
 void resolve_dep(Graph *graph ){
 
@@ -39,6 +40,53 @@ for (int i=0;i<node->nbr_dep;i++){
    install_pkg_dfs(node->dep_array[i]);
 
 }
+
+char command[512];
+
+
+   // Download the package
+
+    snprintf(command, sizeof(command), "sudo kraken download %s", node->pkg_name);
+
+    system(command);
+    // Prepare for the build
+
+    snprintf(command, sizeof(command), "sudo kraken prepare %s", node->pkg_name);
+
+    system(command);
+
+
+    // Build the package
+
+    snprintf(command, sizeof(command), "sudo kraken build %s", node->pkg_name);
+
+    system(command);
+
+
+    // Test the package
+
+    snprintf(command, sizeof(command), "sudo kraken test %s", node->pkg_name);
+
+    system(command);
+      
+    // preinstall
+    snprintf(command, sizeof(command), "sudo kraken preinstall  %s", node->pkg_name);
+
+    system(command);
+  
+
+    // Install the package
+
+    snprintf(command, sizeof(command), "sudo kraken install %s", node->pkg_name);
+
+    system(command);
+
+    // postinstall
+    snprintf(command, sizeof(command), "sudo kraken postinstall  %s", node->pkg_name);
+
+    system(command);
+
+
 printf("installing %s\n",node->pkg_name);
 
 

@@ -29,7 +29,7 @@ fake_inst() {
 
     if ! kraken_install; then
         echo "ERROR: Failed to execute kraken_install for package $pkgname."
-        return 1
+        exit 1
     fi
 
     # Create metadata files if not exist
@@ -60,7 +60,7 @@ fake_inst() {
     fi
 
     echo "fake_inst executed successfully with fake installation."
-    return 0
+    exit 0
 }
 
 
