@@ -14,6 +14,7 @@ metadata_dir="/var/lib/kraken/packages"
 #metadata_file="$metadata_dir/${pkgname}-${pkgver}.kraken"
 if [ ! -d "$metadata_dir" ]; then 
  echo "creating $metadata_dir"
+ mkdir -p  "/var/lib/kraken/"
  mkdir -p "$metadata_dir"
  fi
 
