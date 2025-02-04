@@ -2,9 +2,8 @@
 # Define the source directory
 SOURCE_DIR="/sources"
 REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
+ 
  pkgname="$1"
-
-# Function to download the package
 
     # Ensure the user provided a package name
     if [ -z "$1" ]; then

@@ -28,17 +28,29 @@ fake_inst() {
     eval "$kraken_install_content"
 
     if ! kraken_install; then
-        echo "ERROR: Failed to execute kraken_install for package $pkgname."
+        echo "ERROR: Failed to execute fake_kraken_install for package $pkgname."
         exit 1
     fi
 
     # Create metadata files if not exist
-    [ ! -f "${metadata_dir}/${pkgname}-${pkgver}/FILES" ] && sudo mkdir -p "${metadata_dir}/${pkgname}-${pkgver}" && sudo touch "${metadata_dir}/${pkgname}-${pkgver}/FILES"
-    [ ! -f "${metadata_dir}/${pkgname}-${pkgver}/DIRS" ] && sudo mkdir -p "${metadata_dir}/${pkgname}-${pkgver}" && sudo touch "${metadata_dir}/${pkgname}-${pkgver}/DIRS"
+    [ ! -f "${metadata_dir}/${pkgname}-${pkgver}/FILES" ] &&
+     sudo mkdir -p "${metadata_dir}/${pkgname}-${pkgver}" && 
+     sudo touch "${metadata_dir}/${pkgname}-${pkgver}/FILES"
+
+    [ ! -f "${metadata_dir}/${pkgname}-${pkgver}/DIRS" ] && 
+    sudo mkdir -p "${metadata_dir}/${pkgname}-${pkgver}" && 
+    sudo touch "${metadata_dir}/${pkgname}-${pkgver}/DIRS"
 
     sudo chmod 755 "${metadata_dir}/${pkgname}-${pkgver}/FILES"
 
-    sudo chmod 755 "${metadata_dir}/${pkgname}-${pkgver}/DIRS"
+    #sudo chmod 755 "${metadata_dir}/${pkgname}-${pkgver}/DIRS"
+    sudo chmod 755 "${metadata_dir}/${pkgname}-${pkgver}/DIRS" || {
+
+    echo "Failed to change permissions for DIRS file."
+
+    exit 1
+
+}
 
 
     # Capture files and directories
@@ -52,15 +64,16 @@ fake_inst() {
     sudo cp "$SOURCE_DIR/$pkgname/pkgbuild.kraken" "${metadata_dir}/${pkgname}-${pkgver}/pkgbuild.kraken"
 
     # Call dir_filtring to validate the directories
-    source /home/pkg/kraken/scripts/dir_filtring.sh 
-    if ! dir_filtring "$pkgname"; then
-        echo "Please review and edit /var/lib/kraken/packages/$pkgname-$pkgver/DIRS before removing the package."
-    else
-        echo "Removing package $pkgname is fine if you want."
-    fi
+    source /home/pkg/kraken_package_manager/scripts/dir_filtring.sh
 
-    echo "fake_inst executed successfully with fake installation."
-    exit 0
+if ! dir_filtring "$pkgname" "$pkgver"; then
+   echo -e "\e[31mPlease review and edit /var/lib/kraken/packages/$pkgname-$pkgver/DIRS before removing the package.\e[0m"
+else
+    echo "Removing package $pkgname is fine if you want."
+fi
+
+echo "fake_inst executed successfully with fake installation."
+exit 0
 }
 
 

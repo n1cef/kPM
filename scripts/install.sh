@@ -11,22 +11,23 @@ pkgver=$(awk -F '=' '/^pkgver=/ {print $2}' "$SOURCE_DIR/$pkgname/pkgbuild.krake
 echo "Package version is: $pkgver"
 
 metadata_dir="/var/lib/kraken/packages"
-metadata_file="$metadata_dir/${pkgname}-${pkgver}.kraken"
+#metadata_file="$metadata_dir/${pkgname}-${pkgver}.kraken"
 if [ ! -d "$metadata_dir" ]; then 
  echo "creating $metadata_dir"
  mkdir -p "$metadata_dir"
  fi
 
- if [ ! -f "$metadata_file" ]; then 
- echo "creating $metadata_file"
-   touch  "$metadata_file"
- fi
+ #if [ ! -f "$metadata_file" ]; then 
+ #echo "creating $metadata_file"
+  # touch  "$metadata_file"
+ #fi
  
   
 # Call fake install to cappture the dirs and files maked by this package
     source /home/pkg/kraken_package_manager/scripts/fake_install.sh
     if !fake_inst "$pkgname"; then
     echo "error in  fake install "
+    exit 1
         
     else
         echo "fake instal complete for the packge $pkgname"

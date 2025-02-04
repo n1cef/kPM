@@ -6,7 +6,7 @@ SCRIPTS_DIR="/home/pkg/kraken_package_manager/scripts"
 get_package(){
 
  local pkgname="$1"
- bash "$SCRIPTS_DIR/get_package.sh" "$pkg_name"
+ bash "$SCRIPTS_DIR/get_package.sh" "$pkgname"
 
 
 
@@ -15,13 +15,13 @@ get_package(){
 prepare (){
 
     local pkgname="$1"
- bash "$SCRIPTS_DIR/prepare.sh" "$pkg_name"
+ bash "$SCRIPTS_DIR/prepare.sh" "$pkgname"
 }
 
 build(){
 
  local pkgname="$1"
- bash "$SCRIPTS_DIR/build.sh" "$pkg_name"
+ bash "$SCRIPTS_DIR/build.sh" "$pkgname"
 
 
 
@@ -30,14 +30,14 @@ build(){
 test(){
 
 local pkgname="$1"
- bash "$SCRIPTS_DIR/test.sh" "$pkg_name"
+ bash "$SCRIPTS_DIR/test.sh" "$pkgname"
 
 }
 
 preinstall(){
 
  local pkgname="$1"
- bash "$SCRIPTS_DIR/preinstall.sh" "$pkg_name"
+ bash "$SCRIPTS_DIR/preinstall.sh" "$pkgname"
 
 
 
@@ -46,13 +46,13 @@ preinstall(){
 install(){
 
    local pkgname="$1"
- bash "$SCRIPTS_DIR/install.sh" "$pkg_name" 
+ bash "$SCRIPTS_DIR/install.sh" "$pkgname" 
 }
 
 postinstall(){
 
  local pkgname="$1"
- bash "$SCRIPTS_DIR/postinstall.sh" "$pkg_name"
+ bash "$SCRIPTS_DIR/postinstall.sh" "$pkgname"
 
 
 
@@ -94,7 +94,7 @@ case "$command" in
 
 
 *)
-        echo "Usage: $0 {download|prepare|build|preinstall|install|postinstall} <package_name>"
+        echo "Usage: $0 {download|prepare|build|test|preinstall|install|postinstall} <package_name>"
         exit 1
         ;;
 esac

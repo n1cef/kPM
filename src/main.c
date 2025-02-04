@@ -87,6 +87,7 @@ if (graph == NULL) {
     return EXIT_FAILURE;
 
     }
+    
 build_graph(graph,pkg_name);
 
  if(has_cycle(graph)){
