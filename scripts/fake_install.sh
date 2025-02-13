@@ -64,7 +64,7 @@ fake_inst() {
     sudo cp "$SOURCE_DIR/$pkgname/pkgbuild.kraken" "${metadata_dir}/${pkgname}-${pkgver}/pkgbuild.kraken"
 
     # Call dir_filtring to validate the directories
-    source /home/pkg/kraken_package_manager/scripts/dir_filtring.sh
+    source "/kraken/scripts/dir_filtring.sh"
 
 if ! dir_filtring "$pkgname" "$pkgver"; then
    echo -e "\e[31mPlease review and edit /var/lib/kraken/packages/$pkgname-$pkgver/DIRS before removing the package.\e[0m"

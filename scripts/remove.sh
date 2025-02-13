@@ -14,7 +14,7 @@ fi
 # Check if the package build directory exists
 if [ ! -d "$SOURCE_DIR/$pkgname" ]; then 
     echo "Build directory for package $pkgname does not exist. Don't panic, we will take care of it."
-    source "/home/pkg/kraken_package_manager/scripts/prepare.sh"
+    source "/kraken/scripts/prepare.sh"
     sudo kraken prepare "$pkgname"
 fi
 
@@ -38,7 +38,7 @@ fi
 
 # Extract the kraken_remove function content from pkgbuild.kraken
 kraken_remove_content=$(awk '/^kraken_remove\(\) {/,/^}/' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
-
+echo " kraken remove content is  $kraken_remove_content"
 # Extract the function body and check if it contains only "return"
 function_body=$(awk '/^kraken_remove\(\) {/,/^}/' "$SOURCE_DIR/$pkgname/pkgbuild.kraken" | sed '1d;$d' | tr -d '[:space:]')
 
@@ -52,7 +52,7 @@ if [ "$function_body" = "return" ]; then
     fi
 
     # Call manual_remove
-    source "/home/pkg/kraken_package_manager/scripts/manual_remove.sh"
+    source "/kraken/scripts/manual_remove.sh"
     manual_remove "$pkgname" "$pkgver"
     exit 0
 fi

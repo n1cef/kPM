@@ -1,6 +1,7 @@
 #!/bin/bash
 
 manual_remove() {
+    echo "hello from manual remove "
     pkgname="$1"
     pkgver="$2"
 
