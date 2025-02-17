@@ -1,7 +1,11 @@
 #!/bin/bash
 
 
-SCRIPTS_DIR="/home/pkg/kraken_package_manager/scripts"
+SCRIPTS_DIR="/kraken/scripts"
+SRC_DIR="/kraken/src/entropy"
+
+
+
 
 get_package(){
 
@@ -57,6 +61,16 @@ postinstall(){
 
 
 }
+remove(){
+  local pkgname="$1"
+ bash "$SCRIPTS_DIR/remove.sh" "$pkgname"
+
+}
+
+entropy(){
+  local pkgname="$1"
+  "$SRC_DIR" "$pkgname"
+}
 
 
 
@@ -89,12 +103,17 @@ case "$command" in
     postinstall)
      postinstall "$pkg_name"
     ;;
-
+    entropy)
+    entropy "$pkg_name"
+     ;;
+     remove)
+     remove "$pkg_name"
+     ;;
 
 
 
 *)
-        echo "Usage: $0 {download|prepare|build|test|preinstall|install|postinstall} <package_name>"
+        echo "Usage: $0 {entropy|download|prepare|build|test|preinstall|install|postinstall|remove} <package_name>"
         exit 1
         ;;
 esac

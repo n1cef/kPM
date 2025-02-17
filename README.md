@@ -1,1 +1,1 @@
-# kraken_package_manager
+# kraken
