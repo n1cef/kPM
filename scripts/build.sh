@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Define the source directory
+
 SOURCE_DIR="/sources"
 REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
  
@@ -16,13 +16,13 @@ echo "Package version is: $pkgver"
    echo "prepare contetnt is $kraken_build_content"
     
     eval "$kraken_build_content"
-    # Ensure the function is loaded in the shell
+   
     if ! declare -f kraken_build > /dev/null; then
         echo "ERROR: Failed to load kraken_build function."
         exit 1
     fi
 
-    # Execute the kraken_prepare function
+    
     if ! kraken_build; then
         echo "ERROR: Failed to execute kraken_build for package $pkgname."
         exit 1

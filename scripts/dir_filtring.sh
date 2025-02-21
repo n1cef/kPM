@@ -5,16 +5,16 @@ dir_filtring() {
     metadata_dir="/var/lib/kraken/packages"
     input_file="${metadata_dir}/${pkgname}-${pkgver}/DIRS"
      sudo chmod a=rwx "$input_file"
-    # Ensure input file exists
+    
     if [ ! -f "$input_file" ]; then
         echo "Error: $input_file does not exist."
         return 1
     fi
 
-    # Temporary file to store filtered output
+    
     temp_file=$(mktemp) || { echo "Error: Unable to create temporary file."; return 1; }
 
-    # Define protected paths
+    
     protected_paths=(
     "/"
     "/dev"
@@ -99,12 +99,12 @@ dir_filtring() {
 )
 
 
-    # Loop through each line in the input file
+    
     while IFS= read -r line; do
-        # Trim whitespace from the line
+        
         line=$(echo "$line" | xargs)
 
-        # Check if the line matches any protected path
+        
         match=0
         for protected_path in "${protected_paths[@]}"; do
             # Debugging output
@@ -115,7 +115,7 @@ dir_filtring() {
             fi
         done
 
-        # If no match, write the line to the temporary file
+        
         if [ $match -eq 0 ]; then
             echo "$line is fine"
             echo "$line" >> "$temp_file"
@@ -127,7 +127,7 @@ dir_filtring() {
     echo "Filtered output:"
     sudo cat "$temp_file"
 
-    # If the filtering was successful, replace the original file
+    
     if [ $? -eq 0 ]; then
         sudo mv "$temp_file" "$input_file"
         echo "Filtered metadata saved to $input_file"

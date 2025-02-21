@@ -13,7 +13,7 @@ manual_remove() {
     local package_path="/var/lib/kraken/packages/$pkgname-$pkgver"
     local files_list="$package_path/FILES"
 
-    # Check if FILES exists
+    
     if [ ! -f "$files_list" ]; then
         echo "ERROR: FILES list not found for package $pkgname-$pkgver."
         exit 1
@@ -21,7 +21,7 @@ manual_remove() {
 
     echo "Manual removal in progress for $pkgname-$pkgver..."
 
-    # Read each line (file path) from FILES and remove it
+    
     while IFS= read -r file; do
         if [ -f "$file" ]; then
             echo "Removing file: $file"
@@ -33,7 +33,7 @@ manual_remove() {
         fi
     done < "$files_list"
 
-    # Remove package metadata directory after files are deleted
+    
     echo "Cleaning up package metadata..."
     sudo rm -rf "$package_path"
 

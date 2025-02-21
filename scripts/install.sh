@@ -1,5 +1,5 @@
 #!/bin/bash
-# Define the source directory
+
 SOURCE_DIR="/sources"
 REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
 
@@ -11,7 +11,7 @@ pkgver=$(awk -F '=' '/^pkgver=/ {print $2}' "$SOURCE_DIR/$pkgname/pkgbuild.krake
 echo "Package version is: $pkgver"
 
 metadata_dir="/var/lib/kraken/packages"
-#metadata_file="$metadata_dir/${pkgname}-${pkgver}.kraken"
+
 if [ ! -d "$metadata_dir" ]; then 
  echo "creating $metadata_dir"
  mkdir -p  "/var/lib/kraken/"
@@ -24,8 +24,8 @@ if [ ! -d "$metadata_dir" ]; then
  #fi
  
   
-# Call fake install to cappture the dirs and files maked by this package
-    source "kraken/scripts/fake_install.sh"
+
+    source "/kraken/scripts/fake_install.sh"
     if !fake_inst "$pkgname"; then
     echo "error in  fake install "
     exit 1
@@ -40,13 +40,13 @@ if [ ! -d "$metadata_dir" ]; then
             echo "prepare contetnt is $kraken_install_content"
     
         eval "$kraken_install_content"
-        # Ensure the function is loaded in the shell
+        
         if ! declare -f kraken_install > /dev/null; then
             echo "ERROR: Failed to load kraken_install function."
             exit 1
         fi
 
-        # Execute the kraken_prepare function
+        
         if ! kraken_install ; then
             echo "ERROR: Failed to execute kraken_install for package $pkgname."
             exit 1

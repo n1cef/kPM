@@ -1,5 +1,5 @@
 #!/bin/bash
-# Define the source directory
+
 SOURCE_DIR="/sources"
 REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
  pkgname="$1"
@@ -12,19 +12,19 @@ fake_inst() {
 
     metadata_dir="/var/lib/kraken/packages"
 
-    # Extract the kraken_install function's content
+    
     kraken_install_content=$(awk '/^kraken_install\(\) {/,/^}/' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
     echo "Original kraken_install content:"
     echo "$kraken_install_content"
 
-    # Replace make install and ninja install with their DESTDIR=/tmp equivalents
+    
     kraken_install_content=$(echo "$kraken_install_content" | sed -E \
         -e "s/\bmake install\b/make DESTDIR=\/tmp\/${pkgname}-${pkgver} install/" \
         -e "s/\bninja install\b/ninja install DESTDIR=\/tmp\/${pkgname}-${pkgver}/")
     echo "Modified kraken_install content:"
     echo "$kraken_install_content"
 
-    # Evaluate the modified kraken_install function
+    
     eval "$kraken_install_content"
 
     if ! kraken_install; then
@@ -32,7 +32,7 @@ fake_inst() {
         exit 1
     fi
 
-    # Create metadata files if not exist
+    
     [ ! -f "${metadata_dir}/${pkgname}-${pkgver}/FILES" ] &&
      sudo mkdir -p "${metadata_dir}/${pkgname}-${pkgver}" && 
      sudo touch "${metadata_dir}/${pkgname}-${pkgver}/FILES"
@@ -53,11 +53,11 @@ fake_inst() {
 }
 
 
-    # Capture files and directories
+    
     sudo find "/tmp/${pkgname}-${pkgver}" -type f > "${metadata_dir}/${pkgname}-${pkgver}/FILES"
     sudo find "/tmp/${pkgname}-${pkgver}" -type d > "${metadata_dir}/${pkgname}-${pkgver}/DIRS"
 
-    # Remove temporary prefix
+    
     sudo sed -i "s|^/tmp/${pkgname}-${pkgver}||" "${metadata_dir}/${pkgname}-${pkgver}/FILES"
     sudo sed -i "s|^/tmp/${pkgname}-${pkgver}||" "${metadata_dir}/${pkgname}-${pkgver}/DIRS"
 
