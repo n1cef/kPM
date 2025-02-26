@@ -3,7 +3,7 @@
 ###
 
 <div align="center">
-  <img height="206" src="https://imgs.search.brave.com/HVy-_kyd8IZ0EDeOZFiovJbtW2AZnIapodG8_h7Ia4I/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/d2FsbHBhcGVyc2Fm/YXJpLmNvbS8yMy8x/L0hwRk54VC5qcGc"  />
+  <img height="206" src="https://imgs.search.brave.com/HVy-_kyd8IZ0EDeOZFiovJbtW2AZnIapodG8_h7Ia4I/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/d2FsbHBhcGVyc2Fm/YXJpLmNvbS8yMy8x/L0hwRk54VC5qcGc" />
 </div>
 
 ###
@@ -26,23 +26,9 @@
 
 <h3 align="left">## Building Kraken from Source
 
-Follow the steps below to build and install Kraken from source:
+Follow the steps below to build and install Kraken from source:</h3>
 
 ### 1. Clone the repository
 Clone the **Kraken package manager** repository from GitHub to your system:
 ```sh
-git clone https://github.com/n1cef/kraken_package_manager.git /kraken</h3>
-
-###
-
-<div align="left">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/aarch64/aarch64-original.svg" height="40" alt="aarch64 logo"  />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg" height="40" alt="bash logo"  />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" height="40" alt="c logo"  />
-  <img width="12" />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" height="40" alt="linux logo"  />
-</div>
-
-###
+git clone https://github.com/n1cef/kraken_package_manager.git /kraken
