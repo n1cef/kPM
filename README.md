@@ -16,7 +16,7 @@
 
 ###
 
-<h3 align="left">Kraken provides a set of tools to handle every stage of package management in Kraken OS. Each tool is designed to ensure a smooth and efficient process for building and managing software from source.<br><br>kraken download – Downloads the package tarball from the repository, along with its patches, and verifies its checksum.<br>kraken prepare – Prepares the tarball for building by extracting it and configuring necessary settings before compilation.<br>kraken build – Compiles the package using its specific build system.<br>kraken test – Runs tests to verify that the package was built correctly and functions as expected.<br>kraken preinstall – Performs necessary pre-installation steps before the package is installed.<br>kraken install – Installs the compiled package into the system.<br>kraken postinstall – Executes post-installation steps required for the package to function properly.<br>kraken remove – Uninstalls the package using its native build system removal process.<br>kraken manual_remove – In cases where a package does not have an uninstall system, this tool detects all files and directories related to the package and removes them manually.<br>kraken entropy – Automates package management by detecting dependencies and resolving them in the correct order using the previous tools.<br>These tools make Kraken a powerful and flexible package manager, ensuring complete control over software installation, removal, and dependency management in Kraken OS.</h3>
+<h3 align="left">Kraken provides a set of tools to handle every stage of package management in Kraken OS. Each tool is designed to ensure a smooth and efficient process for building and managing software from source.<br><br>kraken download : Downloads the package tarball from the repository, along with its patches, and verifies its checksum.<br>kraken prepare : Prepares the tarball for building by extracting it and configuring necessary settings before compilation.<br>kraken build : Compiles the package using its specific build system.<br>kraken test : Runs tests to verify that the package was built correctly and functions as expected.<br>kraken preinstall : Performs necessary pre-installation steps before the package is installed.<br>kraken install : Installs the compiled package into the system.<br>kraken postinstall : Executes post-installation steps required for the package to function properly.<br>kraken remove : Uninstalls the package using its native build system removal process.<br>kraken manual_remove : In cases where a package does not have an uninstall system, this tool detects all files and directories related to the package and removes them manually.<br>kraken entropy : Automates package management by detecting dependencies and resolving them in the correct order using the previous tools.<br>These tools make Kraken a powerful and flexible package manager, ensuring complete control over software installation, removal, and dependency management in Kraken OS.</h3>
 
 ###
 
@@ -24,7 +24,14 @@
 
 ###
 
-<h3 align="left"></h3>
+<h3 align="left">## Building Kraken from Source
+
+Follow the steps below to build and install Kraken from source:
+
+### 1. Clone the repository
+Clone the **Kraken package manager** repository from GitHub to your system:
+```sh
+git clone https://github.com/n1cef/kraken_package_manager.git /kraken</h3>
 
 ###
 
