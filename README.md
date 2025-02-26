@@ -24,24 +24,43 @@
 
 ###
 
-<h3 align="left">
-
-Follow the steps below to build and install Kraken from source:</h3>
+<h3 align="left">Follow the steps below to build and install Kraken from source:</h3>
 
 ### 1. Clone the repository
 Clone the **Kraken package manager** repository from GitHub to your system:
 ```sh
-git clone https://github.com/n1cef/kraken_package_manager.git /kraken
+git clone https://github.com/n1cef/kraken_package_manager.git kraken
 
+```
+### 2. Navigate to the Kraken directory
 
-### 2. Prepare for the bulid
- 
+```sh
+cd kraken
+
+```
+### 3. Set up the build environment
+
 ```sh
 meson setup build/
 
-### 3. Install
+
+```
+
+### 4.  Build Kraken
 
 ```sh
-sudo ninja -C build/ install
+ ninja -C build/
+
+
+```
+### 5. Install Kraken
+
+```sh
+ sudo ninja -C build/ install
+
+
+
+```
+
 
 
