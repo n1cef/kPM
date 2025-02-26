@@ -3,7 +3,7 @@
 ###
 
 <div align="center">
-  <img height="206" src="https://imgs.search.brave.com/HVy-_kyd8IZ0EDeOZFiovJbtW2AZnIapodG8_h7Ia4I/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/d2FsbHBhcGVyc2Fm/YXJpLmNvbS8yMy8x/L0hwRk54VC5qcGc" />
+  <img height="206"  width="600" src="https://imgs.search.brave.com/HVy-_kyd8IZ0EDeOZFiovJbtW2AZnIapodG8_h7Ia4I/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/d2FsbHBhcGVyc2Fm/YXJpLmNvbS8yMy8x/L0hwRk54VC5qcGc" />
 </div>
 
 ###
