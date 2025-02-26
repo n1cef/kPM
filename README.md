@@ -23,6 +23,16 @@
 </div>
 
 ###
+## Building Kraken from Source  
+
+To build and install Kraken, run the following commands:  
+
+```sh
+git clone https://github.com/n1cef/kraken_package_manager.git /kraken
+cd /kraken
+meson setup build/
+ninja -C build/ install
+
 
 <img src="https://raw.githubusercontent.com/n1cef/n1cef/output/snake.svg" alt="Snake animation" />
 
