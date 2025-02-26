@@ -72,7 +72,7 @@ char line[256];
 char **dependency_array=NULL;
 *nbr_dep=0;
 char bash_awk_command[1024];
-snprintf(bash_awk_command,sizeof(bash_awk_command),"sudo /kraken/scripts/./extract_dep_with_awk.sh %s %s",pkg_name,SOURCE_DIR);
+snprintf(bash_awk_command,sizeof(bash_awk_command),"sudo /usr/kraken/scripts/./extract_dep_with_awk.sh %s %s",pkg_name,SOURCE_DIR);
 
 FILE *file=popen(bash_awk_command,"r");
 if (file == NULL){

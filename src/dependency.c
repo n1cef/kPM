@@ -1,6 +1,6 @@
 
-#include"../include/dependency.h"
-#include"../include/graph.h"
+#include"/usr/kraken/include/dependency.h"
+#include"/usr/kraken/include/graph.h"
 #include<stdio.h>
 #include<stdlib.h>
 

@@ -1,10 +1,10 @@
 
-#include "../include/graph.h"
+#include "/usr/kraken/include/graph.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "../include/build_graph.h"
-#include "../include/get_pkg.h"
+#include "/usr/kraken/include/build_graph.h"
+#include "/usr/kraken/include/get_pkg.h"
 
 
 void build_graph(Graph *graph, const char *pkg_name) {

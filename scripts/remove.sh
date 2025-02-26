@@ -14,7 +14,7 @@ fi
 
 if [ ! -d "$SOURCE_DIR/$pkgname" ]; then 
     echo "Build directory for package $pkgname does not exist. Don't panic, we will take care of it."
-    source "/kraken/scripts/prepare.sh"
+    source "/usr/kraken/scripts/prepare.sh"
     sudo kraken prepare "$pkgname"
 fi
 
@@ -46,13 +46,13 @@ if [ "$function_body" = "return" ]; then
     echo "kraken_remove is empty. Redirecting to manual_remove..."
     
     
-    if [ ! -f "/kraken/scripts/manual_remove.sh" ]; then
+    if [ ! -f "/usr/kraken/scripts/manual_remove.sh" ]; then
         echo "ERROR: manual_remove.sh script not found."
         exit 1
     fi
 
     # Call manual_remove
-    source "/kraken/scripts/manual_remove.sh"
+    source "/usr/kraken/scripts/manual_remove.sh"
     manual_remove "$pkgname" "$pkgver"
     exit 0
 fi

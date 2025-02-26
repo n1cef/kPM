@@ -3,7 +3,7 @@
 #include<stdbool.h>
 #include<string.h>
 
-#include"../include/graph.h"
+#include"/usr/kraken/include/graph.h"
 
 Graph *create_graph(){
 

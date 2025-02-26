@@ -1,8 +1,8 @@
 #!/bin/bash
 
 
-SCRIPTS_DIR="/kraken/scripts"
-SRC_DIR="/kraken/src/entropy"
+SCRIPTS_DIR="/usr/kraken/scripts"
+#SRC_DIR="/kraken/src/entropy"
 
 
 
@@ -69,7 +69,7 @@ remove(){
 
 entropy(){
   local pkgname="$1"
-  "$SRC_DIR" "$pkgname"
+  /usr/bin/entropy "$pkgname"
 }
 
 

@@ -1,7 +1,7 @@
 #include<stdio.h>
-#include"../include/graph.h"
-#include"../include/dependency.h"
-#include "../include/build_graph.h"
+#include"/usr/kraken/include/graph.h"
+#include"/usr/kraken/include/dependency.h"
+#include "/usr/kraken/include/build_graph.h"
 #include<stdlib.h>
 int main(int argc, char *argv[]){
 

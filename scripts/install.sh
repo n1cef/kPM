@@ -25,7 +25,7 @@ if [ ! -d "$metadata_dir" ]; then
  
   
 
-    source "/kraken/scripts/fake_install.sh"
+    source "/usr/kraken/scripts/fake_install.sh"
     if !fake_inst "$pkgname"; then
     echo "error in  fake install "
     exit 1
