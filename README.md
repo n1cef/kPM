@@ -3,7 +3,7 @@
 ###
 
 <div align="center">
-  <img height="206"  width="600" src="[https://imgs.search.brave.com/HVy-_kyd8IZ0EDeOZFiovJbtW2AZnIapodG8_h7Ia4I/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/d2FsbHBhcGVyc2Fm/YXJpLmNvbS8yMy8x/L0hwRk54VC5qcGc](https://www.deviantart.com/jimking/art/Kraken-4K-Wallpaper-993370012)" />
+  <img height="206"  width="600" src="https://imgs.search.brave.com/hZJY8nXgx1plSBgvPnhx3qQ8F4Odp5bMX2cKbJ2fBL8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtd2l4bXAtZWQz/MGE4NmI4YzRjYTg4/Nzc3MzU5NGMyLndp/eG1wLmNvbS9pLzY1/MjEyMzU5LTU1ZDct/NDAxNS1hNTk1LWVh/ODkzZWM1YmQ5Ny9k/Z2ZmZDdnLTJkODJk/NDY5LWQzZmMtNGU0/My05MjJhLTU2OWI0/ODc3ZTQ5Yi5qcGc" />
 </div>
 
 ###
