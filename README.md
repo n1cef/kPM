@@ -47,7 +47,16 @@ git clone https://github.com/n1cef/kraken_package_manager.git kraken
 cd kraken
 
 ```
-### 3. Set up the build environment
+### 3. Create include directory and Copy some headers
+
+```sh
+sudo mkdir -p /usr/kraken
+
+sudo cp -r include /usr/kraken
+
+```
+
+### 4. Set up the build environment
 
 ```sh
 meson setup build/
@@ -55,18 +64,17 @@ meson setup build/
 
 ```
 
-### 4.  Build Kraken
+### 5.  Build Kraken
 
 ```sh
  ninja -C build/
 
 
 ```
-### 5. Install Kraken
+### 6. Install Kraken
 
 ```sh
  sudo ninja -C build/ install
-
 
 
 ```
