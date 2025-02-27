@@ -12,7 +12,7 @@
   > Kraken is under development and not complete yet! Use at your own risk.
 
   <h3>
-    Kraken is the package manager for Kraken OS, a new Linux distribution built entirely from source. Designed for researchers and scientists, Kraken OS provides a highly customizable and optimized environment tailored for advanced computing needs. Kraken follows a source-based approach, allowing users to compile packages from source for maximum performance and flexibility. This ensures fine-grained control over dependencies, compilation options, and system configuration, making it a powerful choice for those who need a fully customizable Linux experience.
+    Kraken is a package manager for Kraken OS, a new Linux distribution built entirely from source. Designed for researchers and scientists, Kraken OS provides a highly customizable and optimized environment tailored for advanced computing needs. Kraken follows a source-based approach, allowing users to compile packages from source for maximum performance and flexibility. This ensures fine-grained control over dependencies, compilation options, and system configuration, making it a powerful choice for those who need a fully customizable Linux experience.
   </h3>
 </div>
 
