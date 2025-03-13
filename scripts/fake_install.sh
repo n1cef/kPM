@@ -73,7 +73,7 @@ else
 fi
 
 echo "fake_inst executed successfully with fake installation."
-exit 0
+return 0
 }
 
 
