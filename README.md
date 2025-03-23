@@ -3,7 +3,7 @@
 ###
 
 <div align="center">
-  <img height="206"  width="600" src="https://wallpapercave.com/wp/szHV8Ed.jpg" />
+  <img height="300"  width="600" src="https://wallpapercave.com/wp/szHV8Ed.jpg" />
 </div>
 
 ###
