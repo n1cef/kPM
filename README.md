@@ -77,7 +77,10 @@ meson setup build/
 
 ```sh
  sudo ninja -C build/ install
-
+```
+### 7. Create a new  symlink
+```sh
+ ln -sf /usr/bin/kraken.sh /usr/bin/kraken
 
 ```
 
