@@ -1,20 +1,41 @@
 dir_filtring() {
+    # Color Definitions
+    BOLD=$(tput bold)
+    CYAN=$(tput setaf 6)
+    GREEN=$(tput setaf 2)
+    YELLOW=$(tput setaf 3)
+    RED=$(tput setaf 1)
+    GRAY=$(tput setaf 8)
+    RESET=$(tput sgr0)
+
     pkgname="$1"
     pkgver="$2"
 
     metadata_dir="/var/lib/kraken/packages"
     input_file="${metadata_dir}/${pkgname}-${pkgver}/DIRS"
-     sudo chmod a=rwx "$input_file"
     
-    if [ ! -f "$input_file" ]; then
-        echo "Error: $input_file does not exist."
+    echo "${BOLD}${CYAN}=== Directory Filtering: ${YELLOW}${pkgname}-${pkgver} ${CYAN}===${RESET}"
+
+    # File permission handling
+    echo "${BOLD}${CYAN}⌛ Setting file permissions...${RESET}"
+    if ! sudo chmod a=rwx "$input_file" 2>/dev/null; then
+        echo "${BOLD}${RED}✗ ERROR: Permission denied for ${YELLOW}${input_file}${RESET}"
         return 1
     fi
 
-    
-    temp_file=$(mktemp) || { echo "Error: Unable to create temporary file."; return 1; }
+    # Input file validation
+    if [ ! -f "$input_file" ]; then
+        echo "${BOLD}${RED}✗ ERROR: Missing directory list at ${YELLOW}${input_file}${RESET}"
+        return 1
+    fi
 
-    
+    # Create temporary file
+    echo "${BOLD}${CYAN}⌛ Creating temporary workspace...${RESET}"
+    temp_file=$(mktemp) || {
+        echo "${BOLD}${RED}✗ ERROR: Failed to create temporary file${RESET}"
+        return 1
+    }
+
     protected_paths=(
     "/"
     "/dev"
@@ -98,41 +119,41 @@ dir_filtring() {
     "/usr/src"
 )
 
+    echo "${BOLD}${CYAN}🔍 Scanning directories (${YELLOW}${protected_paths[@]:0:3}...${RESET})"
+    echo "${GRAY}ℹ Protected paths list contains ${#protected_paths[@]} entries${RESET}"
 
-    
+    # Processing loop
     while IFS= read -r line; do
-        
         line=$(echo "$line" | xargs)
+        [ -z "$line" ] && continue
 
-        
         match=0
         for protected_path in "${protected_paths[@]}"; do
-            # Debugging output
-            echo "Comparing: '$line' with protected path: '$protected_path'"
             if [ "$line" == "$protected_path" ]; then
                 match=1
                 break
             fi
         done
 
-        
         if [ $match -eq 0 ]; then
-            echo "$line is fine"
+            echo "${GREEN}✓ Allowed: ${YELLOW}${line}${RESET}"
             echo "$line" >> "$temp_file"
         else
-            echo "$line is protected and will be filtered out."
+            echo "${RED}✗ Blocked: ${GRAY}${line}${RESET}"
         fi
     done < "$input_file"
 
-    echo "Filtered output:"
-    sudo cat "$temp_file"
+    # Final output handling
+    echo "${BOLD}${CYAN}\n📋 Filtered directory list:${RESET}"
+    sudo cat "$temp_file" | sed "s/^/  ${GRAY}│ ${RESET}/"
 
-    
     if [ $? -eq 0 ]; then
+        echo "${BOLD}${CYAN}\n⌛ Saving filtered results...${RESET}"
         sudo mv "$temp_file" "$input_file"
-        echo "Filtered metadata saved to $input_file"
+        echo "${GREEN}✓ Successfully filtered ${YELLOW}$(wc -l < "$input_file") ${GREEN}directories${RESET}"
     else
-        echo "Error: Failed to filter the directory list."
+        echo "${BOLD}${RED}\n✗ ERROR: Failed to filter directory list${RESET}"
         sudo rm -f "$temp_file"
+        return 1
     fi
 }

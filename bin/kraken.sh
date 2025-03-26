@@ -1,11 +1,55 @@
 #!/bin/bash
 
 
+BOLD=$(tput bold)
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+BLUE=$(tput setaf 4)
+CYAN=$(tput setaf 6)
+RESET=$(tput sgr0)
+
+
 SCRIPTS_DIR="/usr/kraken/scripts"
-#SRC_DIR="/kraken/src/entropy"
 
+print_help() {
+    echo "${BOLD}${CYAN}Kraken Package Manager - Usage Guide${RESET}"
+    echo "=============================================="
+    
+    echo "${BOLD}${GREEN}Usage:${RESET}"
+    echo "  kraken ${YELLOW}<command>${RESET} ${BLUE}[package_name]${RESET}"
+    echo ""
+    
+    echo "${BOLD}${GREEN}Available Commands:${RESET}"
+    echo "  ${YELLOW}download${RESET}    - Download package sources"
+    echo "  ${YELLOW}prepare${RESET}     - Prepare build environment"
+    echo "  ${YELLOW}build${RESET}       - Compile the package"
+    echo "  ${YELLOW}test${RESET}        - Run package tests"
+    echo "  ${YELLOW}preinstall${RESET}  - Pre-installation checks"
+    echo "  ${YELLOW}install${RESET}     - Install the package"
+    echo "  ${YELLOW}postinstall${RESET} - Post-installation tasks"
+    echo "  ${YELLOW}remove${RESET}      - Uninstall the package"
+    echo "  ${YELLOW}entropy${RESET}     - Dependeny Resolution"
+    echo ""
+    
+    echo "${BOLD}${GREEN}Examples:${RESET}"
+    echo "  ${CYAN}Install a package:${RESET}"
+    echo "  kraken ${YELLOW}install${RESET} ${BLUE}my-awesome-app${RESET}"
+    echo ""
+    echo "  ${CYAN}Build and test:${RESET}"
+    echo "  kraken ${YELLOW}build${RESET} ${BLUE}my-library${RESET} && kraken ${YELLOW}test${RESET} ${BLUE}my-library${RESET}"
+    echo ""
+    echo "  ${CYAN}Full workflow:${RESET}"
+    echo "  kraken ${YELLOW}download${RESET} ${BLUE}cool-package${RESET} && "
+    echo "  kraken ${YELLOW}prepare${RESET} ${BLUE}cool-package${RESET} && "
+    echo "  kraken ${YELLOW}build${RESET} ${BLUE}cool-package${RESET} && "
+    echo "  kraken ${YELLOW}test${RESET} ${BLUE}cool-package${RESET} && "
+    echo "  kraken ${YELLOW}preinstall${RESET} ${BLUE}cool-package${RESET} && "
+    echo "  kraken ${YELLOW}install${RESET} ${BLUE}cool-package${RESET}"
+    echo "  kraken ${YELLOW}postinstall${RESET} ${BLUE}cool-package${RESET}&& "
 
-
+    echo ""
+}
 
 get_package(){
 
@@ -76,7 +120,6 @@ entropy(){
 
 
 
-
 command="$1"
 pkg_name="$2"
 case "$command" in
@@ -87,7 +130,7 @@ case "$command" in
     prepare)
     prepare "$pkg_name"
     ;;
-    
+
     build)
     build "$pkg_name"
     ;;
@@ -113,7 +156,7 @@ case "$command" in
 
 
 *)
-        echo "Usage: $0 {entropy|download|prepare|build|test|preinstall|install|postinstall|remove} <package_name>"
+        print_help
         exit 1
         ;;
 esac

@@ -2,82 +2,99 @@
 
 SOURCE_DIR="/sources"
 REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
- pkgname="$1"
 
 fake_inst() {
+    # Color Definitions
+    BOLD=$(tput bold)
+    CYAN=$(tput setaf 6)
+    GREEN=$(tput setaf 2)
+    YELLOW=$(tput setaf 3)
+    RED=$(tput setaf 1)
+    MAGENTA=$(tput setaf 5)
+    RESET=$(tput sgr0)
+
     pkgname="$1"
-    echo "$pkgname"
+    echo "${BOLD}${CYAN}=== Fake Installation: ${YELLOW}${pkgname} ${CYAN}===${RESET}"
+
+    # Get package version
     pkgver=$(awk -F '=' '/^pkgver=/ {print $2}' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
-    echo "Package version is: $pkgver"
+    echo "${BOLD}${CYAN}ℹ Package version: ${YELLOW}${pkgver}${RESET}"
 
     metadata_dir="/var/lib/kraken/packages"
 
-    
+    # Extract install function
+    echo "${BOLD}${CYAN}⌛ Extracting installation logic...${RESET}"
     kraken_install_content=$(awk '/^kraken_install\(\) {/,/^}/' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
-    echo "Original kraken_install content:"
-    echo "$kraken_install_content"
-
     
+    # Show original content
+    echo "${BOLD}${MAGENTA}Original installation commands:${RESET}"
+    echo "${YELLOW}${kraken_install_content}${RESET}"
+
+    # Modify install commands
+    echo "${BOLD}${CYAN}⚙ Modifying installation paths...${RESET}"
     kraken_install_content=$(echo "$kraken_install_content" | sed -E \
         -e "s/\bmake install\b/make DESTDIR=\/tmp\/${pkgname}-${pkgver} install/" \
         -e "s/\bninja install\b/ninja install DESTDIR=\/tmp\/${pkgname}-${pkgver}/")
-    echo "Modified kraken_install content:"
-    echo "$kraken_install_content"
-
     
-    eval "$kraken_install_content"
+    # Show modified content
+    echo "${BOLD}${MAGENTA}Modified installation commands:${RESET}"
+    echo "${GREEN}${kraken_install_content}${RESET}"
 
+    # Execute modified installation
+    echo "${BOLD}${CYAN}🏗 Executing fake installation...${RESET}"
+    eval "$kraken_install_content"
+    
     if ! kraken_install; then
-        echo "ERROR: Failed to execute fake_kraken_install for package $pkgname."
+        echo "${BOLD}${RED}✗ ERROR: Fake installation failed for ${YELLOW}${pkgname}${RESET}"
         exit 1
     fi
 
-    
-    [ ! -f "${metadata_dir}/${pkgname}-${pkgver}/FILES" ] &&
-     sudo mkdir -p "${metadata_dir}/${pkgname}-${pkgver}" && 
-     sudo touch "${metadata_dir}/${pkgname}-${pkgver}/FILES"
+    # Create metadata files
+    echo "${BOLD}${CYAN}📦 Creating package metadata...${RESET}"
+    [ ! -f "${metadata_dir}/${pkgname}-${pkgver}/FILES" ] && 
+        sudo mkdir -p "${metadata_dir}/${pkgname}-${pkgver}" && 
+        sudo touch "${metadata_dir}/${pkgname}-${pkgver}/FILES"
 
     [ ! -f "${metadata_dir}/${pkgname}-${pkgver}/DIRS" ] && 
-    sudo mkdir -p "${metadata_dir}/${pkgname}-${pkgver}" && 
-    sudo touch "${metadata_dir}/${pkgname}-${pkgver}/DIRS"
+        sudo mkdir -p "${metadata_dir}/${pkgname}-${pkgver}" && 
+        sudo touch "${metadata_dir}/${pkgname}-${pkgver}/DIRS"
 
-    sudo chmod 755 "${metadata_dir}/${pkgname}-${pkgver}/FILES"
+    # Set file permissions
+    if ! sudo chmod 755 "${metadata_dir}/${pkgname}-${pkgver}/FILES" "${metadata_dir}/${pkgname}-${pkgver}/DIRS"; then
+        echo "${BOLD}${RED}✗ ERROR: Failed to set metadata permissions${RESET}"
+        exit 1
+    fi
 
-    #sudo chmod 755 "${metadata_dir}/${pkgname}-${pkgver}/DIRS"
-    sudo chmod 755 "${metadata_dir}/${pkgname}-${pkgver}/DIRS" || {
-
-    echo "Failed to change permissions for DIRS file."
-
-    exit 1
-
-}
-
-
+    # Generate file lists
+    echo "${BOLD}${CYAN}📂 Generating file system records...${RESET}" 
     
     sudo find "/tmp/${pkgname}-${pkgver}" -type f > "${metadata_dir}/${pkgname}-${pkgver}/FILES"
-    sudo find "/tmp/${pkgname}-${pkgver}" -type d > "${metadata_dir}/${pkgname}-${pkgver}/DIRS"
-
     
+    
+    sudo find "/tmp/${pkgname}-${pkgver}" -type d > "${metadata_dir}/${pkgname}-${pkgver}/DIRS"
+     
+    # Clean paths
+    echo "${BOLD}${CYAN}🧹 Cleaning path records...${RESET}"
     sudo sed -i "s|^/tmp/${pkgname}-${pkgver}||" "${metadata_dir}/${pkgname}-${pkgver}/FILES"
     sudo sed -i "s|^/tmp/${pkgname}-${pkgver}||" "${metadata_dir}/${pkgname}-${pkgver}/DIRS"
 
+    # Copy build recipe
+    echo "${BOLD}${CYAN}📋 Archiving package recipe...${RESET}"
     sudo cp "$SOURCE_DIR/$pkgname/pkgbuild.kraken" "${metadata_dir}/${pkgname}-${pkgver}/pkgbuild.kraken"
 
-    # Call dir_filtring to validate the directories
+    # Validate directories
+    echo "${BOLD}${CYAN}🔍 Validating installed directories...${RESET}"
     source "/usr/kraken/scripts/dir_filtring.sh"
+    
+    if ! dir_filtring "$pkgname" "$pkgver"; then
+        echo "${BOLD}${RED}⚠ WARNING: Please review ${YELLOW}/var/lib/kraken/packages/$pkgname-$pkgver/DIRS${RED} before removal${RESET}"
+    else
+        echo "${GREEN}✓ Package directory structure validated${RESET}"
+    fi
 
-if ! dir_filtring "$pkgname" "$pkgver"; then
-   echo -e "\e[31mPlease review and edit /var/lib/kraken/packages/$pkgname-$pkgver/DIRS before removing the package.\e[0m"
-else
-    echo "Removing package $pkgname is fine if you want."
-fi
-
-echo "fake_inst executed successfully with fake installation."
-return 0
+    echo "${BOLD}${GREEN}✅ Fake installation completed successfully for ${YELLOW}${pkgname}${RESET}"
+    return 0
 }
 
-
-#call the function 
-
-
+# Execute main function
 fake_inst "$1"
