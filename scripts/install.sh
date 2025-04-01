@@ -1,68 +1,55 @@
-#!/bin/bash
+#!/bin/sh
 
+# Configuration
 SOURCE_DIR="/sources"
-REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
+METADATA_DIR="/var/lib/kraken/packages"
 
-# Color Definitions
-BOLD=$(tput bold)
-CYAN=$(tput setaf 6)
-GREEN=$(tput setaf 2)
-YELLOW=$(tput setaf 3)
-RED=$(tput setaf 1)
-MAGENTA=$(tput setaf 5)
-RESET=$(tput sgr0)
+# Color definitions
+BOLD="\033[1m"
+CYAN="\033[36m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+RED="\033[31m"
+RESET="\033[0m"
 
+# Argument check
 pkgname="$1"
-echo "${BOLD}${CYAN}=== Package Installation: ${YELLOW}${pkgname} ${CYAN}===${RESET}"
-
-# Get package version
-pkgver=$(awk -F '=' '/^pkgver=/ {print $2}' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
-echo "${BOLD}${CYAN}ℹ Package version: ${YELLOW}${pkgver}${RESET}"
-
-metadata_dir="/var/lib/kraken/packages"
-
-# Create metadata directory
-echo "${BOLD}${CYAN}⌛ Preparing package database...${RESET}"
-if [ ! -d "$metadata_dir" ]; then
-    mkdir -pv "/var/lib/kraken/" "$metadata_dir" || {
-        echo "${BOLD}${RED}✗ ERROR: Failed to create metadata directory${RESET}"
-        exit 1
-    }
-fi
-
-# Fake installation stage
-echo "${BOLD}${CYAN}🏗 Beginning installation process...${RESET}"
-source "/usr/kraken/scripts/fake_install.sh"
-
-if ! fake_inst "$pkgname"; then
-    echo "${BOLD}${RED}✗ ERROR: Fake installation failed for ${YELLOW}${pkgname}${RESET}"
+[ -z "$pkgname" ] && {
+    printf "${BOLD}${RED}✗ Package name not specified${RESET}\n"
     exit 1
-else
-    echo "${GREEN}✓ Fake installation completed successfully${RESET}"
-fi
+}
 
-# Extract and execute real installation
-echo "${BOLD}${CYAN}⚙ Extracting installation commands...${RESET}"
-kraken_install_content=$(awk '/^kraken_install\(\) {/,/^}/' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
+# Load package metadata
+pkgbuild="$SOURCE_DIR/$pkgname/pkgbuild.kraken"
+[ ! -f "$pkgbuild" ] && {
+    printf "${BOLD}${RED}✗ PKGBUILD not found: ${YELLOW}%s${RESET}\n" "$pkgbuild"
+    exit 1
+}
 
-echo "${BOLD}${MAGENTA}Installation commands:${RESET}"
-echo "${YELLOW}${kraken_install_content}${RESET}"
+pkgver=$(awk -F= '/^pkgver=/ {print $2; exit}' "$pkgbuild")
+sudo mkdir -pv "/tmp/$pkgname-$pkgver"
+staging_dir="/tmp/$pkgname-$pkgver"
 
-eval "$kraken_install_content"
+printf "${BOLD}${CYAN}==> Installing ${YELLOW}%s-%s${RESET}\n" "$pkgname" "$pkgver"
 
-if ! declare -f kraken_install > /dev/null; then
-    echo "${BOLD}${RED}✗ ERROR: Failed to load installation function${RESET}"
+# Execute real installation
+printf "${BOLD}${CYAN}==> Staging installation...${RESET}\n"
+if ! . "$pkgbuild" || ! command -v kraken_install >/dev/null; then
+    printf "${BOLD}${RED}✗ Invalid PKGBUILD: Missing install function${RESET}\n"
     exit 1
 fi
 
-echo "${BOLD}${CYAN}🚀 Executing real installation...${RESET}"
-if kraken_install; then
-    echo "${BOLD}${GREEN}✓ Successfully installed ${YELLOW}${pkgname}${RESET}"
-else
-    echo "${BOLD}${RED}✗ ERROR: Installation failed for ${YELLOW}${pkgname}${RESET}"
+# Copy staged files to root
+printf "${BOLD}${CYAN}==> Deploying filesystem changes...${RESET}\n"
+sudo rsync -a "$staging_dir/" / || {
+    printf "${BOLD}${RED}✗ Filesystem deployment failed${RESET}\n"
     exit 1
-fi
+}
 
-echo "${BOLD}${CYAN}🔍 Finalizing installation records...${RESET}"
-echo "${GREEN}✓ Package ${YELLOW}${pkgname} ${GREEN}installed successfully${RESET}"
+# Register package
+printf "${BOLD}${CYAN}==> Finalizing installation...${RESET}\n"
+sudo mkdir -p "$METADATA_DIR/$pkgname-$pkgver" || exit 1
+printf "%s\n" "$pkgver" | sudo tee "$METADATA_DIR/$pkgname-$pkgver" >/dev/null
+
+printf "${BOLD}${GREEN}✓ Successfully installed ${YELLOW}%s-%s${RESET}\n" "$pkgname" "$pkgver"
 exit 0
