@@ -26,6 +26,7 @@ print_help() {
     echo "  ${YELLOW}build${RESET}       - Compile the package"
     echo "  ${YELLOW}test${RESET}        - Run package tests"
     echo "  ${YELLOW}preinstall${RESET}  - Pre-installation checks"
+    echo "  ${YELLOW}fakeinstall${RESET}  - Detect package files and directories "
     echo "  ${YELLOW}install${RESET}     - Install the package"
     echo "  ${YELLOW}postinstall${RESET} - Post-installation tasks"
     echo "  ${YELLOW}remove${RESET}      - Uninstall the package"
@@ -45,6 +46,7 @@ print_help() {
     echo "  kraken ${YELLOW}build${RESET} ${BLUE}cool-package${RESET} && "
     echo "  kraken ${YELLOW}test${RESET} ${BLUE}cool-package${RESET} && "
     echo "  kraken ${YELLOW}preinstall${RESET} ${BLUE}cool-package${RESET} && "
+    echo "  kraken ${YELLOW}faceinstall${RESET} ${BLUE}cool-package${RESET}"
     echo "  kraken ${YELLOW}install${RESET} ${BLUE}cool-package${RESET}"
     echo "  kraken ${YELLOW}postinstall${RESET} ${BLUE}cool-package${RESET}&& "
 
@@ -60,6 +62,13 @@ get_package(){
 
 }
 
+
+dependency (){
+
+local pkgname="$1"
+ bash "$SCRIPTS_DIR/extract_dep_with_awk.sh" "$pkgname" "/sources"
+
+}
 prepare (){
 
     local pkgname="$1"
@@ -87,10 +96,13 @@ preinstall(){
  local pkgname="$1"
  bash "$SCRIPTS_DIR/preinstall.sh" "$pkgname"
 
+}
+fakeinstall(){
+local pkgname="$1"
+ bash "$SCRIPTS_DIR/fake_install.sh" "$pkgname"
 
 
 }
-
 install(){
 
    local pkgname="$1"
@@ -126,7 +138,9 @@ case "$command" in
  download)
     get_package "$pkg_name"
     ;;
-
+dependency)
+    dependency "$pkg_name"
+    ;;
     prepare)
     prepare "$pkg_name"
     ;;
@@ -140,6 +154,9 @@ case "$command" in
     preinstall)
      preinstall "$pkg_name"
     ;;
+    fakeinstall)
+      fakeinstall "$pkg_name"
+      ;;
     install)
     install "$pkg_name"
       ;;
