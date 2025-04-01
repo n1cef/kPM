@@ -22,6 +22,12 @@ get_package() {
         exit 1
     fi
 
+    # Check for curl
+    if ! command -v curl &> /dev/null; then
+        echo "${BOLD}${RED}✗ ERROR: curl is required but not installed${RESET}"
+        exit 1
+    fi
+
     # Create directories
     echo "${BOLD}${CYAN}⌛ Preparing workspace...${RESET}"
     mkdir -p "$SOURCE_DIR/$pkgname" || {
@@ -32,7 +38,7 @@ get_package() {
     # Fetch PKGBUILD
     pkgbuild_url="${REPO_URL}/refs/heads/main/pkgbuilds/$pkgname/pkgbuild.kraken"
     echo "${BOLD}${CYAN}🌐 Downloading package recipe...${RESET}"
-    if ! wget -q -P "$SOURCE_DIR/$pkgname" "$pkgbuild_url"; then
+    if ! curl -sSL -o "$SOURCE_DIR/$pkgname/pkgbuild.kraken" "$pkgbuild_url"; then
         echo "${BOLD}${RED}✗ ERROR: Failed to fetch PKGBUILD for ${YELLOW}${pkgname}${RESET}"
         exit 1
     fi
@@ -58,11 +64,11 @@ get_package() {
         tarball_name=$(basename "$url")
         
         echo "${BOLD}${CYAN}  [$(($i+1))/${#source_urls[@]}] ${MAGENTA}${tarball_name}${RESET}"
-        echo "   ${YELLOW}URL: ${GRAY}${url}${RESET}"
+        echo "   ${YELLOW}URL: ${url}${RESET}"
         echo "   ${MAGENTA}Expected MD5: ${checksum}${RESET}"
 
-        # Download file
-        if ! wget -q "$url" -P "$SOURCE_DIR/$pkgname"; then
+        # Download file with progress
+        if ! curl -# -o "$SOURCE_DIR/$pkgname/$tarball_name" "$url"; then
             echo "${BOLD}${RED}   ✗ Download failed${RESET}"
             exit 1
         fi
