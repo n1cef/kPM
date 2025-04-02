@@ -30,6 +30,7 @@ print_help() {
     echo "  ${YELLOW}install${RESET}     - Install the package"
     echo "  ${YELLOW}postinstall${RESET} - Post-installation tasks"
     echo "  ${YELLOW}remove${RESET}      - Uninstall the package"
+    
     echo "  ${YELLOW}entropy${RESET}     - Dependeny Resolution"
     echo ""
     
@@ -122,6 +123,8 @@ remove(){
  bash "$SCRIPTS_DIR/remove.sh" "$pkgname"
 
 }
+
+
 
 entropy(){
   local pkgname="$1"

@@ -8,10 +8,34 @@ gcc = find_program('gcc', required: true)
 meson_prog = find_program('meson', required: true)
 ninja_prog = find_program('ninja', required: true)
 sudo_prog = find_program('sudo', required: true)
+strace_prog = find_program('strace', required: true)
+fakeroot_prog = find_program('fakeroot', required: true)
+curl_prog = find_program('curl', required: true)
+bash_prog = find_program('bash', required: true)
 
 if not wget.found()
     error('wget is required but not found. Please install it.')
 endif
+
+
+if not strace_prog.found()
+    error('strace is required but not found. Please install it.')
+endif
+
+
+if not fakeroot_prog.found()
+    error('fakeroot is required but not found. Please install it.')
+endif
+
+if not curl_prog.found()
+    error('curl is required but not found. Please install it.')
+endif
+
+if not bash_prog.found()
+    error('bash is required but not found. Please install it.')
+endif
+
+
 
 if not awk.found()
     error('awk is required but not found. Please install it.')

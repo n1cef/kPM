@@ -5,13 +5,13 @@
 #include<stdlib.h>
 
 
-void wait_for_user() {
+//void wait_for_user() {
 
-    printf("Press any key to continue...\n");
+   // printf("Press any key to continue...\n");
 
-    getchar(); 
+   // getchar(); 
 
-}
+//}
 
 void resolve_dep(Graph *graph ){
 
@@ -51,7 +51,7 @@ for (int i=0;i<node->nbr_dep;i++){
 }
 
 printf("\033[0;31mInstalling %s\033[0m\n", node->pkg_name);
-wait_for_user();
+//wait_for_user()
 
 char command[512];
 
@@ -82,7 +82,11 @@ char command[512];
 
     system(command);
   
+    //fake isntall the package 
 
+    snprintf(command, sizeof(command), "sudo kraken fakeinstall  %s", node->pkg_name);
+
+    system(command);
     // Install the package
 
     snprintf(command, sizeof(command), "sudo kraken install %s", node->pkg_name);
