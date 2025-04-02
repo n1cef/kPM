@@ -110,3 +110,10 @@ entropy_exec = executable(
     install_dir: bin_dir
 )
 
+# Install uninstall script properly
+install_data(
+    'uninstall.sh',
+    install_dir: get_option('bindir'),
+    install_mode: 'rwxr-xr-x',
+    rename: 'kraken-uninstall'
+)
