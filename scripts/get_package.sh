@@ -68,7 +68,7 @@ get_package() {
         echo "   ${MAGENTA}Expected MD5: ${checksum}${RESET}"
 
         # Download file with progress
-        if ! curl -# -o "$SOURCE_DIR/$pkgname/$tarball_name" "$url"; then
+        if ! curl -L -# -o "$SOURCE_DIR/$pkgname/$tarball_name" "$url"; then
             echo "${BOLD}${RED}   ✗ Download failed${RESET}"
             exit 1
         fi
