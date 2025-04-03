@@ -83,7 +83,8 @@ scripts = files(
     'scripts/preinstall.sh',
     'scripts/prepare.sh',
     'scripts/remove.sh',
-    'scripts/test.sh'
+    'scripts/test.sh',
+    'scripts/checkinstalled.sh'
 )
 
 # Source files for the entropy executable
