@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# Configuration
+
 METADATA_DIR="/var/lib/kraken/packages"
 
-# Color definitions
+
 BOLD="\033[1m"
 RED="\033[31m"
 YELLOW="\033[33m"

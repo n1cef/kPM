@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Configuration
+
 SOURCE_DIR="/sources"
 METADATA_DIR="/var/lib/kraken/packages"
 TRACE_LOG="/tmp/kraken_strace.log"
@@ -10,7 +10,7 @@ FAKEROOT_CMD="fakeroot"
 export SOURCE_DIR
 export METADATA_DIR
 export FAKEROOT_CMD
-# Color definitions
+
 BOLD="\033[1m"
 CYAN="\033[36m"
 GREEN="\033[32m"
@@ -19,7 +19,7 @@ RED="\033[31m"
 RESET="\033[0m"
 
 fake_inst() {
-    # Argument validation
+    
     pkgname="$1"
     [ -z "$pkgname" ] && {
         printf "${BOLD}${RED}✗ Package name not specified${RESET}\n" >&2
@@ -32,7 +32,7 @@ fake_inst() {
         return 1
     }
 
-    # Extract package version
+   
     pkgver=$(awk -F= '/^pkgver=/ {print $2; exit}' "$pkgbuild")
     echo "pkgveris $pkgver"
 
@@ -46,29 +46,29 @@ fake_inst() {
 
     printf "${BOLD}${CYAN}==> Fake installing ${YELLOW}%s-%s${RESET}\n" "$pkgname" "$pkgver"
 
-    # Clean staging area
+    
     sudo rm -rf "$staging_dir" 2>/dev/null
     mkdir -p "$staging_dir" || return 1
 
-    # Setup environment
+   
     export DESTDIR="$staging_dir"
     export FAKED_MODE="isolated"
     export TMPDIR="${staging_dir}/tmp"
     mkdir -p "$TMPDIR" || return 1
 
-    # Load build recipe
+   
     if ! . "$pkgbuild"; then
         printf "${BOLD}${RED}✗ Failed to load PKGBUILD${RESET}\n" >&2
         return 1
     fi
 
-    # Verify installation function
+   
     if ! command -v kraken_install >/dev/null; then
         printf "${BOLD}${RED}✗ Missing kraken_install() in PKGBUILD${RESET}\n" >&2
         return 1
     fi
 
-    # Tracing execution
+   
     printf "${BOLD}${CYAN}==> Tracing installation...${RESET}\n"
     [ -f "$TRACE_LOG" ] && sudo rm -f "$TRACE_LOG"
 
@@ -84,28 +84,28 @@ fake_inst() {
         return 1
     fi
 
-    # Verify trace log
+   
     [ ! -s "$TRACE_LOG" ] && {
         printf "${BOLD}${RED}✗ Empty strace log generated${RESET}\n" >&2
         return 1
     }
 
-    # Create metadata directory
+   
     sudo mkdir -p "$metadata_dir" || {
         printf "${BOLD}${RED}✗ Failed to create metadata directory${RESET}\n" >&2
         return 1
     }
 
-    # Generate file manifests
+   
     printf "${BOLD}${CYAN}==> Generating file manifests...${RESET}\n"
     files_list="${metadata_dir}/FILES"
     dirs_list="${metadata_dir}/DIRS"
 
-    # Remove any existing directory entries
+    
     sudo rm -rf "$files_list" "$dirs_list" 2>/dev/null
     sudo touch "$files_list" "$dirs_list" || return 1
 
-    # Process trace log
+    
     if ! awk -v staging="$staging_dir" '
         BEGIN { FS = "[\"]" }
         /openat.*O_CREAT/ || /creat\(/ || /mkdir\(/ || /rename\(/ {
@@ -130,13 +130,13 @@ fake_inst() {
         return 1
     fi
 
-    # Verify files list
+   
     [ ! -s "$files_list" ] && {
         printf "${BOLD}${RED}✗ No files recorded in manifest${RESET}\n" >&2
         return 1
     }
 
-    # Generate directory list
+    
     if ! sudo awk '!/-/ {print $0}' "$files_list" | \
         xargs -r -n1 dirname | \
         sort -u | \
@@ -145,7 +145,7 @@ fake_inst() {
         return 1
     fi
 
-    # Security validation
+   
     printf "${BOLD}${CYAN}==> Validating directories...${RESET}\n"
     critical_dirs="^/$\|^/boot\|^/dev\|^/proc\|^/sys\|^/root\|^/home"
     if [ -s "$dirs_list" ] && grep -q "$critical_dirs" "$dirs_list"; then
@@ -154,13 +154,13 @@ fake_inst() {
         return 1
     fi
 
-    # Preserve build recipe
+   
     sudo cp "$pkgbuild" "${metadata_dir}/pkgbuild.kraken" || {
         printf "${BOLD}${RED}✗ Failed to archive PKGBUILD${RESET}\n" >&2
         return 1
     }
 
-    # Set metadata permissions
+    
     sudo chmod 0644 "$files_list" "$dirs_list" || {
         printf "${BOLD}${RED}✗ Failed to set file permissions${RESET}\n" >&2
         return 1

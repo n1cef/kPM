@@ -63,8 +63,14 @@ get_package(){
 
 }
 
+checkinstalled (){
 
-dependency (){
+    local pkgname="$1"
+ bash "$SCRIPTS_DIR/checkinstalled" "$pkgname"
+}
+
+
+listdependency (){
 
 local pkgname="$1"
  bash "$SCRIPTS_DIR/extract_dep_with_awk.sh" "$pkgname" "/sources"
@@ -141,8 +147,8 @@ case "$command" in
  download)
     get_package "$pkg_name"
     ;;
-dependency)
-    dependency "$pkg_name"
+listdependency)
+    listdependency "$pkg_name"
     ;;
     prepare)
     prepare "$pkg_name"
@@ -154,6 +160,10 @@ dependency)
     test)
     test "$pkg_name"
     ;;
+    checkinstalled)
+    checkinstalled "$pkg_name"
+    ;;
+
     preinstall)
      preinstall "$pkg_name"
     ;;

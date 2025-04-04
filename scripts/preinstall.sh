@@ -16,15 +16,14 @@ preinstall() {
     pkgname="$1"
     echo "${BOLD}${CYAN}=== Pre-Installation Checks: ${YELLOW}${pkgname} ${CYAN}===${RESET}"
 
-    # Extract pre-install commands
+   
     echo "${BOLD}${CYAN}⌛ Extracting pre-installation logic...${RESET}"
     kraken_preinstall_content=$(awk '/^kraken_preinstall\(\) {/,/^}/' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
     
-    # Display extracted content
+    
     echo "${BOLD}${MAGENTA}Pre-installation commands:${RESET}"
     echo "${YELLOW}${kraken_preinstall_content}${RESET}"
 
-    # Evaluate function
     echo "${BOLD}${CYAN}⚙ Loading pre-installation function...${RESET}"
     eval "$kraken_preinstall_content"
 
@@ -33,7 +32,7 @@ preinstall() {
         exit 1
     fi
 
-    # Execute pre-install
+    
     echo "${BOLD}${CYAN}🛠️ Running pre-installation tasks...${RESET}"
     if kraken_preinstall; then
         echo "${BOLD}${GREEN}✓ Pre-installation completed for ${YELLOW}${pkgname}${RESET}"

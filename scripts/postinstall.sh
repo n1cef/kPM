@@ -4,7 +4,7 @@ SOURCE_DIR="/sources"
 REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
 
 postinstall() {
-    # Color Definitions
+    
     BOLD=$(tput bold)
     CYAN=$(tput setaf 6)
     GREEN=$(tput setaf 2)
@@ -16,19 +16,19 @@ postinstall() {
     pkgname="$1"
     echo "${BOLD}${CYAN}=== Post-Installation: ${YELLOW}${pkgname} ${CYAN}===${RESET}"
 
-    # Get package version
+    
     pkgver=$(awk -F '=' '/^pkgver=/ {print $2}' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
     echo "${BOLD}${CYAN}ℹ Package version: ${YELLOW}${pkgver}${RESET}"
 
-    # Extract post-install commands
+    
     echo "${BOLD}${CYAN}⌛ Extracting post-installation logic...${RESET}"
     kraken_postinstall_content=$(awk '/^kraken_postinstall\(\) {/,/^}/' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
     
-    # Display extracted content
+    
     echo "${BOLD}${MAGENTA}Post-installation commands:${RESET}"
     echo "${YELLOW}${kraken_postinstall_content}${RESET}"
 
-    # Evaluate function
+    
     echo "${BOLD}${CYAN}⚙ Loading post-installation function...${RESET}"
     eval "$kraken_postinstall_content"
 
