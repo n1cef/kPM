@@ -30,8 +30,10 @@ print_help() {
     echo "  ${YELLOW}install${RESET}     - Install the package"
     echo "  ${YELLOW}postinstall${RESET} - Post-installation tasks"
     echo "  ${YELLOW}remove${RESET}      - Uninstall the package"
+    echo "  ${YELLOW}listdependency${RESET} - Display package dependency tree"
+    echo "  ${YELLOW}checkinstalled${RESET}      - Verify package installation statu "
     
-    echo "  ${YELLOW}entropy${RESET}     - Dependeny Resolution"
+    echo "  ${YELLOW}entropy${RESET}     - Resolve Dependency Tree & Build from Source"
     echo ""
     
     echo "${BOLD}${GREEN}Examples:${RESET}"
@@ -52,6 +54,11 @@ print_help() {
     echo "  kraken ${YELLOW}postinstall${RESET} ${BLUE}cool-package${RESET}&& "
 
     echo ""
+
+    echo "  kraken ${YELLOW}remove${RESET} ${BLUE}cool-package${RESET}&& "
+
+
+
 }
 
 get_package(){
