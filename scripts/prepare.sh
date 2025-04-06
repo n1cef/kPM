@@ -55,33 +55,33 @@ prepare_package() {
         printf "  ${MAGENTA}• %s${RESET}\n" "${deps[@]}"
         echo "${CYAN}These dependencies must be resolved before building."
         
-        read -p "${BOLD}${CYAN}Do you want to: 
-1) Install dependencies automatically (requires entropy)
-2) Continue anyway
-3) Abort preparation
-Choice [1/2/3]: ${RESET}" response
+       # read -p "${BOLD}${CYAN}Do you want to: 
+#1) Install dependencies automatically (requires entropy)
+#2) Continue anyway
+#3) Abort preparation
+#Choice [1/2/3]: ${RESET}" response
         
-        case $response in
-            1)
-                echo "${CYAN}Attempting automatic dependency resolution..."
-                if ! sudo kraken entropy "$pkgname"; then
-                    echo "${RED}✗ Failed to resolve dependencies"
-                    exit 1
-                fi
-                ;;
-            2)
-                echo "${YELLOW}⚠ Proceeding with unmet dependencies - build may fail!"
-                sleep 2
-                ;;
-            3)
-                echo "${GREEN}✅ Preparation aborted by user"
-                exit 0
-                ;;
-            *)
-                echo "${RED}✗ Invalid choice"
-                exit 1
-                ;;
-        esac
+    #    case $response in
+      #      1)
+       #         echo "${CYAN}Attempting automatic dependency resolution..."
+        #        if ! sudo kraken entropy "$pkgname"; then
+         #           echo "${RED}✗ Failed to resolve dependencies"
+          #          exit 1
+           #     fi
+            #    ;;
+           # 2)
+            #    echo "${YELLOW}⚠ Proceeding with unmet dependencies - build may fail!"
+             #   sleep 2
+              #  ;;
+            #3)
+             #   echo "${GREEN}✅ Preparation aborted by user"
+              #  exit 0
+               # ;;
+            #*)
+             #   echo "${RED}✗ Invalid choice"
+              #  exit 1
+               # ;;
+        #esac
     else
         echo "${GREEN}✅ No dependencies required - safe to build"
     fi
