@@ -12,12 +12,17 @@ strace_prog = find_program('strace', required: true)
 fakeroot_prog = find_program('fakeroot', required: true)
 curl_prog = find_program('curl', required: true)
 bash_prog = find_program('bash', required: true)
+yq = find_program('yq', required: true)
 
 if not wget.found()
     error('wget is required but not found. Please install it.')
 endif
 
 
+
+if not yq.found()
+    error('yq is required but not found. Please install it.')
+endif
 if not strace_prog.found()
     error('strace is required but not found. Please install it.')
 endif
