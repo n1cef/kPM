@@ -51,7 +51,7 @@ char **get_pkg (const char *pkg_name,int *nbr_dep){
     printf(CYAN BOLD "🌐 Package URL: " YELLOW "%s\n" RESET, pkgbuild_url);
 
     char command[1024];
-    snprintf(command,sizeof(command),"sudo kraken download %s",pkg_name);
+    snprintf(command,sizeof(command),"sudo kraken oaddownl %s",pkg_name);
     printf(MAGENTA BOLD "⚙ Executing: " RESET MAGENTA "%s\n" RESET, command);
     
     int verify_down = system(command);

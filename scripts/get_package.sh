@@ -1,17 +1,28 @@
+
 #!/bin/bash
 
 SOURCE_DIR="/sources"
-REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
+REPO_URL="https://raw.githubusercontent.com/n1cef/KUR/main"
+
+INDEX_URL="$REPO_URL/pkgindex.kraken"
+CACHE_DIR="$HOME/.cache/krakenpm"
+
+INDEX_CACHE="$CACHE_DIR/pkgindex.kraken"
+CACHE_TTL=3600 
+
+
+BOLD=$(tput bold)
+CYAN=$(tput setaf 6)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+RED=$(tput setaf 1)
+MAGENTA=$(tput setaf 5)
+RESET=$(tput sgr0)
+
 
 get_package() {
 
-    BOLD=$(tput bold)
-    CYAN=$(tput setaf 6)
-    GREEN=$(tput setaf 2)
-    YELLOW=$(tput setaf 3)
-    RED=$(tput setaf 1)
-    MAGENTA=$(tput setaf 5)
-    RESET=$(tput sgr0)
+   
 
     pkgname="$1"
     echo "${BOLD}${CYAN}=== Fetching Package: ${YELLOW}${pkgname} ${CYAN}===${RESET}"
@@ -27,7 +38,7 @@ get_package() {
 
     echo "${BOLD}${CYAN}🔍 Checking installation status...${RESET}"
     if sudo kraken checkinstalled "$pkgname" >/dev/null 2>&1; then
-        echo "${BOLD}${YELLOW}⚠ WARNING: ${YELLOW}${pkgname} is already installed!${RESET}"
+        echo "${BOLD}${YELLOW}⚠ WARNING: ${YELLOW}${pkgname} is alreadny istalled!${RESET}"
         read -p "${BOLD}${CYAN}Do you want to download and reinstall it? [y/N] ${RESET}" response
         case "${response,,}" in  # Convert to lowercase
             y|yes)
@@ -55,12 +66,51 @@ get_package() {
     }
 
   
-    pkgbuild_url="${REPO_URL}/refs/heads/main/pkgbuilds/$pkgname/pkgbuild.kraken"
-    echo "${BOLD}${CYAN}🌐 Downloading package recipe...${RESET}"
-    if ! curl -sSL -o "$SOURCE_DIR/$pkgname/pkgbuild.kraken" "$pkgbuild_url"; then
-        echo "${BOLD}${RED}✗ ERROR: Failed to fetch PKGBUILD for ${YELLOW}${pkgname}${RESET}"
-        exit 1
+
+    echo "${CYAN}🌐 Updating package index...${RESET}"
+    mkdir -p "$CACHE_DIR"
+    if ! find "$CACHE_DIR" -name "$(basename "$INDEX_CACHE")" -mmin -60 | grep -q .; then
+        curl -sSL -o "$INDEX_CACHE" "$INDEX_URL" || {
+            echo "${RED}✗ Failed to fetch index${RESET}"; exit 1
+        }
     fi
+  
+
+
+    echo "${CYAN}🔍 Looking up package metadata...${RESET}"
+    local metadata=$(yq eval ".packages.$pkgname" "$INDEX_CACHE")
+    [ -z "$metadata" ] && {
+        echo "${RED}✗ Package $pkgname not found in repository${RESET}"; exit 1
+    }
+
+    
+
+    local category=$(yq eval ".packages.$pkgname.category" "$INDEX_CACHE")
+    local pkgbuild_path=$(yq eval ".packages.$pkgname.path" "$INDEX_CACHE")
+
+    local pkgbuild_url="${REPO_URL}/${pkgbuild_path}"
+
+    echo "${CYAN}📦 Downloading recipe from ${YELLOW}${pkgbuild_url}${RESET}"
+    curl -sSL -o "$SOURCE_DIR/$pkgname/pkgbuild.kraken" "$pkgbuild_url" || {
+        echo "${RED}✗ Failed to fetch PKGBUILD${RESET}"; exit 1
+    }
+
+
+    local expected_checksum=$(yq eval ".packages.$pkgname.checksum" "$INDEX_CACHE" | out -d: -f2)
+    
+
+
+    local actual_checksum=$(sha256sum "$SOURCE_DIR/$pkgname/pkgbuild.kraken" | cut -d' ' -f1)
+
+     [ "$actual_checksum" != "$expected_checksum" ] && {
+        echo "${RED}✗ Checksum mismatch for PKGBUILD${RESET}"
+        echo "${YELLOW}Expected: $expected_checksum"
+        echo "Actual:   $actual_checksum${RESET}"
+        exit 1
+    }
+
+
+    
 
    
     echo "${BOLD}${CYAN}📦 Extracting package sources...${RESET}"
