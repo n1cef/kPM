@@ -65,7 +65,7 @@ get_package() {
     }
 
     
-    local version =$(yq eval ".packages.$pkgname.version" "$INDEX_CACHE") 
+    local version=$(yq eval ".packages.$pkgname.version" "$INDEX_CACHE") 
     local category=$(yq eval ".packages.$pkgname.category" "$INDEX_CACHE")
     local pkgbuild_path=$(yq eval ".packages.$pkgname.path" "$INDEX_CACHE")
 
