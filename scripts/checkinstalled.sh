@@ -6,27 +6,22 @@ DB_FILE="/var/lib/kraken/db/kraken.db"
 PKG_NAME="$1"
 version="$2"
 
-sqlite3 "$DB_FILE" <<EOF
 
-exists=$(sqlite3 "$DB_FILE" "SELECT id FROM packages WHERE ((name ='$PKG_NAME') AND 
-(installed='1')  (version='$version');")
 
+exists=$(sqlite3 "$DB_FILE" "SELECT id FROM packages WHERE name = '$PKG_NAME' AND version = '$VERSION' AND installed = 1;")
 
 
 
-if [ -n "$exists" ]; then 
-    exit 1 
-fi  
 
-
-else 
-
-exit 0
-
-EOF
+if [ -n "$exists" ]; then
+    exit 1   #installed
+else
+    exit 0   #not installed
+fi
 
 
 
+#---------------------------todo : we need to implement a mecanism to handle  echo $?  to see the result 
 
 
 

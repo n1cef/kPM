@@ -1,8 +1,14 @@
 #!/bin/bash
 
 SOURCE_DIR="/sources"
-REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
+DB_FILE="/var/lib/kraken/db/kraken.db"
 metadata_dir="/var/lib/kraken/packages"
+
+
+INDEX_URL="$REPO_URL/pkgindex.kraken"
+CACHE_DIR="$HOME/.cache/krakenpm"
+
+INDEX_CACHE="$CACHE_DIR/pkgindex.kraken"
 
 remove_package() {
     
@@ -23,7 +29,29 @@ remove_package() {
         exit 1
     fi
 
-    
+    local version=$(yq eval ".packages.$pkgname.version" "$INDEX_CACHE") 
+
+ echo "${BOLD}${CYAN}🔍 Checking installation status...${RESET}"
+    if sudo kraken checkinstalled "$pkgname"  "$version" >/dev/null 2>&1; then
+        
+                          echo "package  detected ,continue"  
+       
+    else
+        echo "${BOLD}${GREEN}✅ ${YELLOW}${pkgname}${GREEN} is not installed. Proceeding...${RESET}"
+
+              
+        exit 1
+
+
+    fi
+
+
+
+
+
+
+
+
     if [ ! -d "$SOURCE_DIR/$pkgname" ]; then 
         echo "${BOLD}${YELLOW}⚠ Build directory not found - preparing package...${RESET}"
         source "/usr/kraken/scripts/prepare.sh"
@@ -85,6 +113,19 @@ remove_package() {
         echo "${BOLD}${RED}✗ ERROR: Removal failed for ${YELLOW}${pkgname}${RESET}"
         exit 1
     fi
+
+  source /var/lib/kraken/db/kraken_db.sh
+  if remove_package "$pkgname" "$version" ; then
+    echo "Database updated"
+else
+    echo "Database error: $?" >&2
+    exit 1
+fi
+
+
+
+
+
 
     exit 0
 }
