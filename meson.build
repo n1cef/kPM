@@ -120,9 +120,8 @@ install_data(scripts, install_dir: scripts_dir)
 install_data(metadata,install_dir:metadata_dir)
 
 # Install the main script (kraken.sh -> /usr/bin/kraken)
-install_data('bin/kraken.sh', install_dir: bin_dir, install_mode: 'rwxr-xr-x')
+install_data('bin/kraken.sh', install_dir: bin_dir, install_mode: 'rwxr-xr-x' rename: 'kraken')
 
-# Compile and install the entropy binary
 entropy_exec = executable(
     'entropy',
     ['src/main.c', 'src/build_graph.c', 'src/graph.c', 'src/dependency.c', 'src/get_pkg.c'],
@@ -130,10 +129,10 @@ entropy_exec = executable(
     install_dir: bin_dir
 )
 
-# Install uninstall script properly
+
 install_data(
     'uninstall.sh',
-    install_dir: get_option('bindir'),
+    install_dir: bindir,
     install_mode: 'rwxr-xr-x',
     rename: 'kraken-uninstall'
 )
