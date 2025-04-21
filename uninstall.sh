@@ -22,6 +22,7 @@ fi
 
 clean_dirs=(
     "/usr/kraken"
+    "/var/lib/kraken/db"
     "/var/lib/kraken"
     "/sources/kraken" 
     "/tmp/kraken_strace.log"
@@ -32,7 +33,7 @@ clean_dirs=(
 for path in "${clean_dirs[@]}"; do
     if [ -e "$path" ]; then
         echo "Removing: $path"
-        rm -rf "$path"
+        rm -Rf "$path"
     fi
 done
 

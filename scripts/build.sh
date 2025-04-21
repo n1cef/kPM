@@ -28,8 +28,8 @@ echo "${BOLD}${CYAN}=== Building Package: ${pkgname} ===${RESET}"
 
 local version=$(yq eval ".packages.$pkgname.version" "$INDEX_CACHE") 
 
-#pkgver=$(awk -F '=' '/^pkgver=/ {print $2}' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
-#echo "${BOLD}${CYAN}ℹ Package version: ${YELLOW}${pkgver}${RESET}"
+pkgver=$(awk -F '=' '/^pkgver=/ {print $2}' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
+echo "${BOLD}${CYAN}ℹ Package version: ${YELLOW}${pkgver}${RESET}"
 
 
 
