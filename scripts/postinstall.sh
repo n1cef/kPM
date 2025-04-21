@@ -1,7 +1,10 @@
 #!/bin/bash
 
 SOURCE_DIR="/sources"
-REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
+DB_FILE="/var/lib/kraken/db/kraken.db"
+CACHE_DIR="$HOME/.cache/krakenpm"
+
+INDEX_CACHE="$CACHE_DIR/pkgindex.kraken"
 
 postinstall() {
     
@@ -20,7 +23,40 @@ postinstall() {
     pkgver=$(awk -F '=' '/^pkgver=/ {print $2}' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
     echo "${BOLD}${CYAN}ℹ Package version: ${YELLOW}${pkgver}${RESET}"
 
-    
+    local version=$(yq eval ".packages.$pkgname.version" "$INDEX_CACHE") 
+
+    [ -z "$version" ] && {
+        printf "${BOLD}${RED}✗ Failed to detect package version${RESET}\n" >&2
+        return 1
+    }
+
+
+source /var/lib/kraken/db/kraken_db.sh
+
+pkg_id=$(get_pkg_id "$pkgname" "$version")
+if [ -z "$pkg_id" ]; then  
+    echo "${RED}Package not found in database${RESET}"
+    exit 1
+fi
+
+installed_status=$(check_steps "$pkg_id" "installed")
+
+
+if [ -z "$installed_status" ]; then
+    echo "Package not found in database"
+    exit 1
+elif [ "$installed_status" -ne 1 ]; then
+    echo "You must run kraken install $pkgname first"
+    exit 1
+fi
+
+
+
+
+
+
+
+
     echo "${BOLD}${CYAN}⌛ Extracting post-installation logic...${RESET}"
     kraken_postinstall_content=$(awk '/^kraken_postinstall\(\) {/,/^}/' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
     
@@ -45,6 +81,24 @@ postinstall() {
         echo "${BOLD}${RED}✗ ERROR: Post-installation failed for ${YELLOW}${pkgname}${RESET}"
         exit 1
     fi
+
+source /var/lib/kraken/db/kraken_db.sh
+
+   if ! mark_postinstalled "$pkg_id"; then
+    echo "${RED}Failed to update postinstalled status${RESET}"
+    exit 1
+fi
+
+if verifyall_steps "$pkg_id"; then
+    echo "${GREEN}Package fully installed!${RESET}"
+else
+    echo "${RED} Installation incomplete! you can check the installation_steps table with \n
+     sqlitebrowser /var/lib/kraken/db/kraken.db and please report any bug in </github.com/n1cef/kraken_package_manager> ${RESET}"
+    exit 1
+fi
+
+
+
 
     exit 0
 }

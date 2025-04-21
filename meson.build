@@ -108,9 +108,9 @@ src = files(
 )
 
 db = files (
-   'kraken.sql',
-   'kraken.db',
-    'kraken_db.sh'
+   'db/kraken.sql',
+   'db/kraken.db',
+    'db/kraken_db.sh'
 
 )
 

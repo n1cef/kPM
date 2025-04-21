@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SOURCE_DIR="/sources"
-DB_FILE="/var/lib/kraken/kraken.db"
+DB_FILE="/var/lib/kraken/db/kraken.db"
 CACHE_DIR="$HOME/.cache/krakenpm"
 
 INDEX_CACHE="$CACHE_DIR/pkgindex.kraken"
@@ -22,7 +22,7 @@ prepare_package() {
 local version=$(yq eval ".packages.$pkgname.version" "$INDEX_CACHE") 
 
 
-source /usr/lib/kraken/db/kraken-db.sh
+source /var/lib/kraken/db/kraken_db.sh
 
 pkg_id=$(get_pkg_id "$pkgname" "$version")
 if [ -z "$pkg_id" ]; then  # Check for empty
@@ -112,7 +112,7 @@ fi
         echo "${GREEN}✅ No dependencies required - safe to build"
     fi
 
-source /usr/lib/kraken/db/kraken-db.sh
+source /var/lib/kraken/db/kraken_db.sh
 
    if ! mark_prepared "$pkg_id"; then
     echo "${RED}Failed to update preparation status${RESET}"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-DB_FILE="/var/lib/kraken/kraken.db"
+DB_FILE="/var/lib/kraken/db/kraken.db"
 
 
 # to escape sql special characters shit 
@@ -123,4 +123,42 @@ check_steps() {
 SELECT $step FROM installation_steps
 WHERE package_id = $pkg_id;
 EOF
+}
+
+
+
+verifyall_steps() {
+    local pkg_id=$(sql_escape "$1")
+    
+   s
+    local status=$(sqlite3 -line "$DB_FILE" <<EOF
+SELECT * FROM installation_steps 
+WHERE package_id = $pkg_id;
+EOF
+    )
+
+    
+    if echo "$status" | grep -qE 'downloaded\s*=\s*1' && \
+       echo "$status" | grep -qE 'prepared\s*=\s*1' && \
+       echo "$status" | grep -qE 'builded(ed)?\s*=\s*1' && \
+       echo "$status" | grep -qE 'fakeinstalled\s*=\s*1' && \
+       echo "$status" | grep -qE 'installed\s*=\s*1' && \
+       echo "$status" | grep -qE 'postinstalled\s*=\s*1'; then
+        
+       
+        sqlite3 "$DB_FILE" <<EOF
+BEGIN TRANSACTION;
+UPDATE packages SET
+    installed = 1,
+    date = datetime('now')
+WHERE id = $pkg_id;
+COMMIT;
+EOF
+        return 0
+    else
+        
+        echo "Missing steps:"
+        echo "$status" | awk -F' = ' '/ 0$/ {print $1}'
+        return 1
+    fi
 }

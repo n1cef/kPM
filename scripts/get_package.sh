@@ -1,6 +1,6 @@
 
 #!/bin/bash
-DB_FILE="/var/lib/kraken/kraken.db"
+DB_FILE="/var/lib/kraken/db/kraken.db"
 SOURCE_DIR="/sources"
 REPO_URL="https://raw.githubusercontent.com/n1cef/KUR/main"
 
@@ -169,7 +169,7 @@ get_package() {
  
     echo "${BOLD}${GREEN}✅ Successfully retrieved ${YELLOW}${pkgname}${GREEN} with ${YELLOW}${#source_urls[@]}${GREEN} verified sources${RESET}"
 
-source /usr/lib/kraken/db/kraken-db.sh
+source /var/lib/kraken/db/kraken_db.sh
   if mark_downloaded "$pkgname" "$version" "$category"; then
     echo "Database updated"
 else

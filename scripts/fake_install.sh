@@ -1,6 +1,8 @@
 #!/bin/sh
 
 
+
+
 SOURCE_DIR="/sources"
 METADATA_DIR="/var/lib/kraken/packages"
 TRACE_LOG="/tmp/kraken_strace.log"
@@ -10,6 +12,14 @@ FAKEROOT_CMD="fakeroot"
 export SOURCE_DIR
 export METADATA_DIR
 export FAKEROOT_CMD
+
+
+
+DB_FILE="/var/lib/kraken/db/kraken.db"
+CACHE_DIR="$HOME/.cache/krakenpm"
+
+INDEX_CACHE="$CACHE_DIR/pkgindex.kraken"
+
 
 BOLD="\033[1m"
 CYAN="\033[36m"
@@ -32,14 +42,49 @@ fake_inst() {
         return 1
     }
 
-   
-    pkgver=$(awk -F= '/^pkgver=/ {print $2; exit}' "$pkgbuild")
-    echo "pkgveris $pkgver"
-
-    [ -z "$pkgver" ] && {
+   pkgver=$(awk -F= '/^pkgver=/ {print $2; exit}' "$pkgbuild")
+   [ -z "$pkgver" ] && {
         printf "${BOLD}${RED}✗ Failed to detect package version${RESET}\n" >&2
         return 1
     }
+   local version=$(yq eval ".packages.$pkgname.version" "$INDEX_CACHE") 
+
+    [ -z "$version" ] && {
+        printf "${BOLD}${RED}✗ Failed to detect package version${RESET}\n" >&2
+        return 1
+    }
+
+
+source /var/lib/kraken/db/kraken_db.sh
+
+pkg_id=$(get_pkg_id "$pkgname" "$version")
+if [ -z "$pkg_id" ]; then  
+    echo "${RED}Package not found in database${RESET}"
+    exit 1
+fi
+
+builded_status=$(check_steps "$pkg_id" "builded")
+
+
+if [ -z "$builded_status" ]; then
+    echo "Package not found in database"
+    exit 1
+elif [ "$builded_status" -ne 1 ]; then
+    echo "You must run kraken build $pkgname first"
+    exit 1
+fi
+
+
+
+
+
+
+
+
+
+
+
+
 
     staging_dir="/tmp/${pkgname}-${pkgver}"
     metadata_dir="${METADATA_DIR}/${pkgname}-${pkgver}"
@@ -165,6 +210,22 @@ fake_inst() {
         printf "${BOLD}${RED}✗ Failed to set file permissions${RESET}\n" >&2
         return 1
     }
+
+
+
+source /var/lib/kraken/db/kraken_db.sh
+
+   if ! mark_fake_installed "$pkg_id"; then
+    echo "${RED}Failed to update fakeinstalld status${RESET}"
+    exit 1
+fi
+
+
+
+
+
+
+
 
     printf "${BOLD}${GREEN}✓ Fake install completed for ${YELLOW}%s-%s${RESET}\n" "$pkgname" "$pkgver"
     return 0

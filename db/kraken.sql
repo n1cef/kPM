@@ -13,7 +13,7 @@ CREATE TABLE installation_steps (
     prepared INTEGER DEFAULT 0,
     builded INTEGER DEFAULT 0,
     fakeinstalled INTEGER DEFAULT 0,
-    install INTEGER DEFAULT 0,
+    installed INTEGER DEFAULT 0,
     postinstalled INTEGER DEFAULT 0,
     FOREIGN KEY(package_id) REFERENCES packages(id)
 );

@@ -2,14 +2,14 @@
 
 [ $# -eq 0 ] && exit 1
 
-DB_FILE="/var/lib/kraken/kraken.db"
+DB_FILE="/var/lib/kraken/db/kraken.db"
 PKG_NAME="$1"
 version="$2"
 
 sqlite3 "$DB_FILE" <<EOF
 
 exists=$(sqlite3 "$DB_FILE" "SELECT id FROM packages WHERE ((name ='$PKG_NAME') AND 
-(installed='1') ;")
+(installed='1')  (version='$version');")
 
 
 
