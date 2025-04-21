@@ -79,6 +79,10 @@ meson setup build/
  sudo ninja -C build/ install
 ```
 
+<h3 align="left">To uninstall Kraken use:</h3>
 
+```sh
+ sudo kraken-uninstall 
+```
 
 
