@@ -25,6 +25,7 @@ clean_dirs=(
     "/var/lib/kraken"
     "/sources/kraken" 
     "/tmp/kraken_strace.log"
+    "/root/.cache/krakenpm"
 )
 
 

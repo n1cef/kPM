@@ -1,6 +1,10 @@
 #!/bin/bash
 
 SOURCE_DIR="/sources"
+DB_FILE="/var/lib/kraken/kraken.db"
+CACHE_DIR="$HOME/.cache/krakenpm"
+
+INDEX_CACHE="$CACHE_DIR/pkgindex.kraken"
 
 prepare_package() {
   
@@ -15,7 +19,29 @@ prepare_package() {
     pkgname="$1"
     echo "${BOLD}${CYAN}=== Preparation Stage: ${YELLOW}${pkgname} ${CYAN}===${RESET}"
 
-   
+local version=$(yq eval ".packages.$pkgname.version" "$INDEX_CACHE") 
+
+
+source /usr/lib/kraken/db/kraken-db.sh
+
+pkg_id=$(get_pkg_id "$pkgname" "$version")
+if [ -z "$pkg_id" ]; then  # Check for empty
+    echo "${RED}Package not found in database${RESET}"
+    exit 1
+fi
+
+downloaded_status=$(check_steps "$pkg_id" "downloaded")
+
+
+if [ -z "$downloaded_status" ]; then
+    echo "Package not found in database"
+    exit 1
+elif [ "$downloaded_status" -ne 1 ]; then
+    echo "You must run kraken download $pkgname first"
+    exit 1
+fi
+
+
     if [[ ! -f "$SOURCE_DIR/$pkgname/pkgbuild.kraken" ]]; then
         echo "${BOLD}${RED}✗ ERROR: PKGBUILD not found${RESET}"
         exit 1
@@ -85,6 +111,20 @@ prepare_package() {
     else
         echo "${GREEN}✅ No dependencies required - safe to build"
     fi
+
+source /usr/lib/kraken/db/kraken-db.sh
+
+   if ! mark_prepared "$pkg_id"; then
+    echo "${RED}Failed to update preparation status${RESET}"
+    exit 1
+fi
+
+
+
+
+
+
+
 }
 
 

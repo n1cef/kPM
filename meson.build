@@ -72,6 +72,7 @@ headers_dir = '/usr/kraken/include'
 scripts_dir = '/usr/kraken/scripts'
 bin_dir = '/usr/bin'
 metadata_dir = '/var/lib/kraken'
+db_dir='/var/lib/kraken/db'
 # Header files
 headers = files(
     'include/build_graph.h', 
@@ -106,10 +107,10 @@ src = files(
     'src/main.c'
 )
 
-metadata = files (
-
-   'kraken.db'
-
+db = files (
+   'kraken.sql',
+   'kraken.db',
+    'kraken_db.sh'
 
 )
 
@@ -117,10 +118,10 @@ metadata = files (
 # Install headers and scripts
 install_data(headers, install_dir: headers_dir)
 install_data(scripts, install_dir: scripts_dir)
-install_data(metadata,install_dir:metadata_dir)
+install_data(db,install_dir:db_dir)
 
 # Install the main script (kraken.sh -> /usr/bin/kraken)
-install_data('bin/kraken.sh', install_dir: bin_dir, install_mode: 'rwxr-xr-x' rename: 'kraken')
+install_data('bin/kraken.sh', install_dir: bin_dir, install_mode: 'rwxr-xr-x' ,rename: 'kraken')
 
 entropy_exec = executable(
     'entropy',
@@ -132,7 +133,7 @@ entropy_exec = executable(
 
 install_data(
     'uninstall.sh',
-    install_dir: bindir,
+    install_dir: bin_dir,
     install_mode: 'rwxr-xr-x',
     rename: 'kraken-uninstall'
 )

@@ -169,16 +169,11 @@ get_package() {
  
     echo "${BOLD}${GREEN}✅ Successfully retrieved ${YELLOW}${pkgname}${GREEN} with ${YELLOW}${#source_urls[@]}${GREEN} verified sources${RESET}"
 
-
-   if ! sqlite3 "$DB_FILE" <<EOF
-    INSERT INTO packages (name, version, category) 
-    VALUES ('$pkgname', '$version', '$category');
-    
-    INSERT INTO installation_steps (package_id, downloaded)
-    VALUES (last_insert_rowid(), 1);
-EOF
-then
-     echo "${RED}✗ Database operation failed!${RESET}"
+source /usr/lib/kraken/db/kraken-db.sh
+  if mark_downloaded "$pkgname" "$version" "$category"; then
+    echo "Database updated"
+else
+    echo "Database error: $?" >&2
     exit 1
 fi
 

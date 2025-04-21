@@ -9,7 +9,11 @@ RED=$(tput setaf 1)
 RESET=$(tput sgr0)
 
 SOURCE_DIR="/sources"
-REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository"
+DB_FILE="/var/lib/kraken/kraken.db"
+CACHE_DIR="$HOME/.cache/krakenpm"
+
+INDEX_CACHE="$CACHE_DIR/pkgindex.kraken"
+
 
 pkgname="$1"
 echo "${BOLD}${CYAN}=== Building Package: ${pkgname} ===${RESET}"

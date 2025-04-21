@@ -73,7 +73,8 @@ get_package(){
 checkinstalled (){
 
     local pkgname="$1"
- bash "$SCRIPTS_DIR/checkinstalled" "$pkgname"
+    local pkgver="$2"
+ bash "$SCRIPTS_DIR/checkinstalled.sh" "$pkgname" "$pkgver"
 }
 
 
@@ -150,6 +151,7 @@ entropy(){
 
 command="$1"
 pkg_name="$2"
+pkg_ver="$3"
 case "$command" in
  download)
     get_package "$pkg_name"
@@ -168,7 +170,7 @@ listdependency)
     test "$pkg_name"
     ;;
     checkinstalled)
-    checkinstalled "$pkg_name"
+    checkinstalled "$pkg_name" "$pkg_ver"
     ;;
 
     preinstall)
