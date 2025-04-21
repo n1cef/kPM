@@ -13,11 +13,16 @@ fakeroot_prog = find_program('fakeroot', required: true)
 curl_prog = find_program('curl', required: true)
 bash_prog = find_program('bash', required: true)
 yq = find_program('yq', required: true)
+sqlite3 = find_program('sqlite3', required: true)
+
 
 if not wget.found()
     error('wget is required but not found. Please install it.')
 endif
 
+if not sqlite3.found()
+    error('sqlite3 is required but not found. Please install it.')
+endif
 
 
 if not yq.found()
@@ -66,7 +71,7 @@ endif
 headers_dir = '/usr/kraken/include'
 scripts_dir = '/usr/kraken/scripts'
 bin_dir = '/usr/bin'
-
+metadata_dir = '/var/lib/kraken'
 # Header files
 headers = files(
     'include/build_graph.h', 
@@ -101,9 +106,18 @@ src = files(
     'src/main.c'
 )
 
+metadata = files (
+
+   'kraken.db'
+
+
+)
+
+
 # Install headers and scripts
 install_data(headers, install_dir: headers_dir)
 install_data(scripts, install_dir: scripts_dir)
+install_data(metadata,install_dir:metadata_dir)
 
 # Install the main script (kraken.sh -> /usr/bin/kraken)
 install_data('bin/kraken.sh', install_dir: bin_dir, install_mode: 'rwxr-xr-x')
