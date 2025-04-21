@@ -40,7 +40,7 @@
 ### 1. Clone the repository
 Clone the **Kraken package manager** repository from GitHub to your system:
 ```sh
-git clone https://github.com/n1cef/kraken_package_manager.git kraken
+git clone https://github.com/n1cef/KPM.git kraken
 
 ```
 ### 2. Navigate to the Kraken directory
