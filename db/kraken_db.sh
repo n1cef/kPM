@@ -4,7 +4,7 @@
 DB_FILE="/var/lib/kraken/db/kraken.db"
 
 
-# to escape sql special characters shit 
+ 
 sql_escape() {
     sed "s/'/''/g" <<< "$1"
 }
@@ -75,7 +75,7 @@ mark_fake_installed() {
     sqlite3 "$DB_FILE" <<EOF
 BEGIN TRANSACTION;
 UPDATE installation_steps
-SET fake_installed = 1
+SET fakeinstalled = 1
 WHERE package_id = $pkg_id;
 COMMIT;
 EOF
@@ -130,7 +130,7 @@ EOF
 verifyall_steps() {
     local pkg_id=$(sql_escape "$1")
     
-   s
+   
     local status=$(sqlite3 -line "$DB_FILE" <<EOF
 SELECT * FROM installation_steps 
 WHERE package_id = $pkg_id;
@@ -159,6 +159,36 @@ EOF
         
         echo "Missing steps:"
         echo "$status" | awk -F' = ' '/ 0$/ {print $1}'
+        return 1
+    fi
+}
+
+
+remove_package() {
+    local pkgname=$(sql_escape "$1")
+    local pkgver=$(sql_escape "$2")
+    
+    local pkg_id=$(sqlite3 "$DB_FILE" \
+        "SELECT id FROM packages WHERE ((name = '$pkgname') AND (version = '$version'));")
+    
+    if [ -z "$pkg_id" ]; then
+        echo "Package $pkgname not found in database"
+        return 1
+    fi
+
+    
+    sqlite3 "$DB_FILE" <<EOF
+BEGIN TRANSACTION;
+DELETE FROM installation_steps WHERE package_id = $pkg_id;
+DELETE FROM packages WHERE id = $pkg_id;
+COMMIT;
+EOF
+
+    if [ $? -eq 0 ]; then
+        echo "Successfully removed $pkgname"
+        return 0
+    else
+        echo "Failed to remove $pkgname"
         return 1
     fi
 }

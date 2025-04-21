@@ -16,7 +16,8 @@ preinstall() {
     pkgname="$1"
     echo "${BOLD}${CYAN}=== Pre-Installation Checks: ${YELLOW}${pkgname} ${CYAN}===${RESET}"
 
-   
+    pkgver=$(awk -F '=' '/^pkgver=/ {print $2}' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
+    echo "${BOLD}${CYAN}ℹ Package version: ${YELLOW}${pkgver}${RESET}"
     echo "${BOLD}${CYAN}⌛ Extracting pre-installation logic...${RESET}"
     kraken_preinstall_content=$(awk '/^kraken_preinstall\(\) {/,/^}/' "$SOURCE_DIR/$pkgname/pkgbuild.kraken")
     
