@@ -42,7 +42,29 @@ for(int i=0;i< graph->nbr_node;i++){
 void install_pkg_dfs(Node *node){
 
 if(node->visited){return;}
-node->visited=1;
+
+
+
+
+char check_cmd[256];
+   snprintf(check_cmd, sizeof(check_cmd),
+       "sudo kraken checkinstalled %s %s >/dev/null 2>&1",
+       node->pkg_name,
+       node->version
+   );
+
+
+
+   int installed = system(check_cmd);
+   if (WIFEXITED(installed) && WEXITSTATUS(installed) == 1) {
+       printf("[SKIP] %s-%s already installed\n", 
+             node->pkg_name, node->version);
+       node->visited = 1;
+       return;
+   }
+
+
+  
 for (int i=0;i<node->nbr_dep;i++){
 
 
@@ -50,7 +72,7 @@ for (int i=0;i<node->nbr_dep;i++){
 
 }
 
-printf("\033[0;31mInstalling %s\033[0m\n", node->pkg_name);
+printf("[INSTALL] %s-%s\n", node->pkg_name, node->version);
 //wait_for_user()
 
 char command[512];
@@ -99,10 +121,12 @@ char command[512];
     system(command);
 
 
-
+    node->visited = 1;
 
 
 }
 
-  
+
+
+
 

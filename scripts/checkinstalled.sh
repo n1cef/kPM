@@ -21,6 +21,8 @@ fi
 
 
 
+
+
 #---------------------------todo : we need to implement a mecanism to handle  echo $?  to see the result 
 
 

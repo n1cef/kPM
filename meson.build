@@ -78,7 +78,8 @@ headers = files(
     'include/build_graph.h', 
     'include/dependency.h', 
     'include/get_pkg.h', 
-    'include/graph.h'
+    'include/graph.h',
+    'include/conflict.h'
 )
 
 # Scripts
@@ -95,7 +96,9 @@ scripts = files(
     'scripts/prepare.sh',
     'scripts/remove.sh',
     'scripts/test.sh',
-    'scripts/checkinstalled.sh'
+    'scripts/checkinstalled.sh',
+    'scripts/getdeps.sh',
+    'scripts/getversion.sh'
 )
 
 # Source files for the entropy executable
@@ -104,7 +107,8 @@ src = files(
     'src/dependency.c', 
     'src/get_pkg.c', 
     'src/graph.c', 
-    'src/main.c'
+    'src/main.c',
+    'src/conflict.c'
 )
 
 db = files (
@@ -125,7 +129,7 @@ install_data('bin/kraken.sh', install_dir: bin_dir, install_mode: 'rwxr-xr-x' ,r
 
 entropy_exec = executable(
     'entropy',
-    ['src/main.c', 'src/build_graph.c', 'src/graph.c', 'src/dependency.c', 'src/get_pkg.c'],
+    ['src/main.c', 'src/build_graph.c', 'src/graph.c', 'src/dependency.c', 'src/get_pkg.c','src/conflict.c'],
     install: true,
     install_dir: bin_dir
 )

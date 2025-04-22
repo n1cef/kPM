@@ -13,9 +13,10 @@ graph->nbr_node=0;
 return graph;
 }
 
-Node *create_node(const char *pkg_name){
+Node *create_node(const char *pkg_name, const char *version ){
 Node *node = malloc (sizeof(Node));
 node->pkg_name=strdup(pkg_name);
+node->version=strdup(version);
 node->dep_array=NULL;
 node->nbr_dep=0;
 node->visited=0;
@@ -110,13 +111,19 @@ return false;
 }
 
 
-Node *find_node_by_name(Graph *graph ,const char *pkg_name){
+
+
+
+
+Node *find_node_by_name_and_version(Graph *graph ,const char *pkg_name,const char *version){
 
 for (int i =0 ; i<graph->nbr_node;i++){
 
-     if(strcmp(graph->node_array[i]->pkg_name,pkg_name)==0){
+   Node *current = graph->node_array[i];
+     if(strcmp(current->pkg_name,pkg_name)==0 && 
+        strcpm(current->version,version) == 0 ){
 
-        return graph->node_array[i];
+        return current;
 
 
      }

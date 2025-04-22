@@ -1,10 +1,11 @@
 #include<stdio.h>
 #include"/usr/kraken/include/graph.h"
+#include"/usr/kraken/include/conflict.h"
 #include"/usr/kraken/include/dependency.h"
 #include "/usr/kraken/include/build_graph.h"
 #include<stdlib.h>
 
-// Color definitions
+
 #define RED "\033[31m"
 #define GREEN "\033[32m"
 #define YELLOW "\033[33m"
@@ -13,7 +14,7 @@
 #define RESET "\033[0m"
 
 int main(int argc, char *argv[]){
-    // Print header
+    
     printf(BOLD CYAN "\n=== Kraken Package Resolver ===\n\n" RESET);
 
     if(argc < 2){
@@ -33,6 +34,11 @@ int main(int argc, char *argv[]){
     printf(CYAN BOLD "🔨 Building dependency graph...\n" RESET);
     build_graph(graph, pkg_name);
 
+
+    printf(CYAN BOLD "\n🔍 Checking for version conflicts...\n" RESET);
+    check_version_conflicts(graph);
+
+
     printf(CYAN BOLD "\n🔍 Checking for cycles...\n" RESET);
     if(has_cycle(graph)){
         fprintf(stderr, RED BOLD "\n✗ ERROR: " RESET RED "Circular dependency detected!\n" RESET);
@@ -48,3 +54,5 @@ int main(int argc, char *argv[]){
     free_graph(graph);
     return EXIT_SUCCESS;
 }
+
+

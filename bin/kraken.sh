@@ -145,6 +145,24 @@ entropy(){
   /usr/bin/entropy "$pkgname"
 }
 
+getversion(){
+
+ local pkgname="$1"
+ bash "$SCRIPTS_DIR/getversion.sh" "$pkgname"
+
+
+
+}
+
+getdeps(){
+
+ local pkgname="$1"
+ local version="$2"
+ bash "$SCRIPTS_DIR/getdeps.sh" "$pkgname" "$version"
+
+
+
+}
 
 
 
@@ -190,6 +208,12 @@ listdependency)
      ;;
      remove)
      remove "$pkg_name"
+     ;;
+      getdeps)
+     getdeps "$pkg_name" "$pkg_ver"
+     ;;
+      getversion)
+     getversion "$pkg_name"
      ;;
 
 
