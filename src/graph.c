@@ -121,7 +121,7 @@ for (int i =0 ; i<graph->nbr_node;i++){
 
    Node *current = graph->node_array[i];
      if(strcmp(current->pkg_name,pkg_name)==0 && 
-        strcpm(current->version,version) == 0 ){
+        strcmp(current->version,version) == 0 ){
 
         return current;
 

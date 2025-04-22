@@ -5,7 +5,7 @@
 #include<unistd.h>
 #include<dirent.h>
 
-// Color definitions
+
 #define RED "\033[31m"
 #define GREEN "\033[32m"
 #define YELLOW "\033[33m"
@@ -19,7 +19,7 @@ char **get_pkg (const char *pkg_name,int *nbr_dep){
     const char *REPO_URL="https://raw.githubusercontent.com/n1cef/kraken_repository";
     char PKG_DIR[256];
 
-    // Directory creation with colorized output
+   
     if(opendir(SOURCE_DIR)== NULL){
         if(mkdir (SOURCE_DIR,0755)== -1){
             fprintf(stderr, RED BOLD "✗ ERROR: " RESET RED "Failed to create %s directory\n" RESET, SOURCE_DIR);
@@ -37,7 +37,7 @@ char **get_pkg (const char *pkg_name,int *nbr_dep){
         printf(GREEN BOLD "✓ Created package directory: " CYAN "%s\n" RESET, PKG_DIR);
     }
 
-    // Ownership changes
+    
     if(chown(SOURCE_DIR,getuid(),getgid())== -1 ){
         fprintf(stderr, YELLOW BOLD "⚠ WARNING: " RESET YELLOW "Failed to change ownership of %s\n" RESET, SOURCE_DIR);
     }
@@ -45,7 +45,6 @@ char **get_pkg (const char *pkg_name,int *nbr_dep){
         fprintf(stderr, YELLOW BOLD "⚠ WARNING: " RESET YELLOW "Failed to change ownership of %s\n" RESET, PKG_DIR);
     }
 
-    // Package download
     char pkgbuild_url[512]; 
     snprintf(pkgbuild_url,sizeof(pkgbuild_url),"%s/refs/heads/main/pkgbuilds/%s/pkgbuild.kraken",REPO_URL,pkg_name);
     printf(CYAN BOLD "🌐 Package URL: " YELLOW "%s\n" RESET, pkgbuild_url);
@@ -61,7 +60,7 @@ char **get_pkg (const char *pkg_name,int *nbr_dep){
     }
     printf(GREEN BOLD "✓ Successfully downloaded: " YELLOW "%s\n" RESET, pkg_name);
 
-    // Dependency extraction
+   
     char **dependency_array=NULL;
     *nbr_dep=0;
     char bash_awk_command[1024];

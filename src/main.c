@@ -1,10 +1,10 @@
 #include<stdio.h>
+
+#include<stdlib.h>
 #include"/usr/kraken/include/graph.h"
 #include"/usr/kraken/include/conflict.h"
 #include"/usr/kraken/include/dependency.h"
 #include "/usr/kraken/include/build_graph.h"
-#include<stdlib.h>
-
 
 #define RED "\033[31m"
 #define GREEN "\033[32m"

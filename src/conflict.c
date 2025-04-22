@@ -1,9 +1,11 @@
-#include"/usr/kraken/include/graph.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "/usr/kraken/include/graph.h"
+#include "/usr/kraken/include/conflict.h"
 
 void check_version_conflicts(Graph *graph) {
+    
     typedef struct {
         char *name;
         char *version;
@@ -12,11 +14,9 @@ void check_version_conflicts(Graph *graph) {
     PkgVersion *versions = malloc(graph->nbr_node * sizeof(PkgVersion));
     int count = 0;
     
-    
     for (int i = 0; i < graph->nbr_node; i++) {
         Node *node = graph->node_array[i];
         
-       
         for (int j = 0; j < count; j++) {
             if (strcmp(versions[j].name, node->pkg_name) == 0) {
                 if (strcmp(versions[j].version, node->version) != 0) {
@@ -31,12 +31,10 @@ void check_version_conflicts(Graph *graph) {
             }
         }
         
-       
         versions[count].name = strdup(node->pkg_name);
         versions[count].version = strdup(node->version);
         count++;
     }
-    
     
     for (int i = 0; i < count; i++) {
         free(versions[i].name);

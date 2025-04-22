@@ -10,18 +10,12 @@ int nbr_dep;
 int visited;
 
 
-
 } Node;
 
 
 typedef struct Graph {
  Node **node_array;
  int nbr_node;
-
-
-
-
-
 
 } Graph;
 
