@@ -79,7 +79,7 @@ get_package() {
 
 
     echo "${BOLD}${CYAN}🔍 Checking installation status...${RESET}"
-    if sudo kraken checkinstalled "$pkgname"  "$version" >/dev/null 2>&1; then
+    if ! sudo kraken checkinstalled "$pkgname"  "$version" >/dev/null 2>&1; then
         echo "${BOLD}${YELLOW}⚠ WARNING: ${YELLOW}${pkgname} is alreadny istalled!${RESET}"
         echo "${BOLD}${YELLOW}⚠ HINT: \n
         you  can update the pacakge with sudo kraken update ${YELLOW}${pkgname} \n

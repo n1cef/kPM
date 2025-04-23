@@ -1,90 +1,104 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include <assert.h>
+#include<strings.h>
 #include "/usr/kraken/include/graph.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include "/usr/kraken/include/build_graph.h"
-#include "/usr/kraken/include/get_pkg.h"
-
-
-#define BOLD "\033[1m"
-#define RED "\033[31m"
-#define GREEN "\033[32m"
-#define YELLOW "\033[33m"
-#define CYAN "\033[36m"
-#define RESET "\033[0m"
-
-void build_graph(Graph *graph, const char *pkg_name) {
-
-
-
-    char version_cmd[256];
-    snprintf(version_cmd, sizeof(version_cmd),
-        "sudo kraken getversion %s",
-        pkg_name);
-    
-    FILE *version_file = popen(version_cmd, "r");
-    if (!version_file) {
-        fprintf(stderr, "Failed to get version for %s\n", pkg_name);
-        return;
-    }
-    
-    char version[128];
-    if (!fgets(version, sizeof(version), version_file)) {
-        pclose(version_file);
-        return;
-    }
-    pclose(version_file);
-    version[strcspn(version, "\n")] = 0;
+#include "/usr/kraken/include/get_ver_dep_checkins.h"
+void build_graph(Graph *graph , const char *pkgname){
 
 
 
 
-   
+  char *version=get_version(pkgname);
+  if (!version){
+    fprintf(stderr,"cant process package %s version not found please repport  this /gihbu.com/n1cef/KPM", pkgname);
+    return;
 
-    Node *pkg_node = find_node_by_name_and_version(graph, pkg_name,version);
 
+  }
+  //we need to check if the package is installed in the system by quary form /var/lib/kraken/db/kraken.db
+  if(check_installed(pkgname,version)){
+    printf("package %s-%s is already installed \n" ,pkgname,version);
+    free(version);
+    return;
+
+
+  }
+
+
+  //if the node exist in the graph or we must create it
+
+  Node *pkg_node=find_node_by_packages_name_and_version(graph,pkgname,version);
+  if (!pkg_node){
+    pkg_node=create_node(pkgname,version);
     if(!pkg_node){
-        pkg_node = create_node(pkg_name,version);
-        printf(GREEN "✓ Created node: " YELLOW "%s" RESET "\n", pkg_name);
-        add_node(graph, pkg_node);
+      fprintf(stderr, "failed to create node for %s-%s",pkgname,version);
+      free (version);
+      return ;
+
+    }
+    free (version);
+  }
+
+  //we need to get the dependecy
+
+  int dep_count=0;
+  char **deps_array=get_deps(pkgname,version,&dep_count);
+  if (!deps_array){
+    return ; // no dependecy for this package 
+
+
+  }
+
+  for (int i =0;i<dep_count;i++){
+
+    char *dep_name=deps_array[i];
+    char *dep_version=get_version(dep_name);
+    if (!dep_version){
+
+      fprintf(stderr,"missing version of the dependency %s\n" , dep_name);
+      continue;//prevent this bad dependencie to break the intire process
     }
 
-    char dep_cmd[256];
-    snprintf(dep_cmd, sizeof(dep_cmd),
-        "sudo kraken getdeps %s %s",
-        pkg_name, version);
-    
-    FILE *dep_file = popen(dep_cmd, "r");
-    if (!dep_file) {
-        fprintf(stderr, "Failed to get dependencies\n");
-        return;
-    }
-    
-    char dep_line[256];
-    while (fgets(dep_line, sizeof(dep_line), dep_file)) {
-        dep_line[strcspn(dep_line, "\n")] = 0;
+    if(!check_installed(dep_name,dep_version)){
+      
         
-        char dep_name[128];
-        char dep_version[128];
-        if (sscanf(dep_line, "%127[^@]@%127s", dep_name, dep_version) != 2) {
-            continue;
-        }
-        
-        Node *dep_node = find_node_by_name_and_version(graph, dep_name, dep_version);
-        if (!dep_node) {
-            dep_node = create_node(dep_name, dep_version);
-            add_node(graph, dep_node);
-        }
-        
-        add_dependency(pkg_node, dep_node);
-        build_graph(graph, dep_name);  // Recursive build
+      build_graph(graph,dep_name);
+
+      Node *dep_node=find_node_by_packages_name_and_version(graph,dep_name,dep_version);
+      if(dep_node){
+	add_dependencies(pkg_node,dep_node);
+	
+
+      }
+      
+
+
     }
-    pclose(dep_file);
 
 
+
+    free(dep_version);
 
 
 
     
-    }
 
+  }
+
+  //clean this shit
+  
+  for (int i=0;i<dep_count;i++){
+
+    free(deps_array[i]);
+    
+  }
+  free(deps_array);
+  
+
+
+
+
+
+}
