@@ -15,8 +15,9 @@ void build_graph(Graph *graph , const char *pkgname){
     fprintf(stderr,"cant process package %s version not found please repport  this /gihbu.com/n1cef/KPM", pkgname);
     return;
 
-
+  
   }
+  printf("version is %s",version);
   //we need to check if the package is installed in the system by quary form /var/lib/kraken/db/kraken.db
   if(check_installed(pkgname,version)){
     printf("package %s-%s is already installed \n" ,pkgname,version);

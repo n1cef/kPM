@@ -21,8 +21,11 @@ fi
 
 
 clean_dirs=(
+    "/usr/kraken/include"
+    "/usr/kraken/scripts"
     "/usr/kraken"
     "/var/lib/kraken/db"
+    "/var/lib/kraken/packages"
     "/var/lib/kraken"
     "/sources/kraken" 
     "/tmp/kraken_strace.log"
@@ -37,16 +40,20 @@ for path in "${clean_dirs[@]}"; do
     fi
 done
 
-# Symlinks
+
 clean_symlinks=(
     "/usr/bin/kraken"
     "/usr/bin/entropy"
+    "/usr/bin/kraken-uninstall"
 )
 
 for link in "${clean_symlinks[@]}"; do
     if [ -L "$link" ]; then
         echo "Removing symlink: $link"
-        rm -f "$link"
+        rm -Rf "$link"
+    
+    else
+	rm -Rf "$link"
     fi
 done
 

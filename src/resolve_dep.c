@@ -10,6 +10,7 @@
 void resolve_dep(Graph *graph)
 {
 
+  printf("i find the graph");
   for (int i=0;i<graph->nbr_node;i++){
  
     graph->node_array[i]->visited=0;

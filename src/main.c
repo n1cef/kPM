@@ -41,6 +41,7 @@ fprintf(stderr, RED BOLD "✗ ERROR: " RESET RED "Failed to initialize dependenc
        printf(CYAN BOLD "🔨 Building dependency graph...\n" RESET);
        build_graph(graph,pkg_name);
 
+
        // TBD: HANDLE THE CONFLICT OF THE DEFFEREN VRERSION OF THE SAME PACKAGE NAME 
        // printf(CYAN BOLD "\n🔍 Checking for version conflicts...\n" RESET);
        // check_version_conflicts(graph);
@@ -62,6 +63,8 @@ printf(CYAN BOLD "\n🔍 Checking for cycles...\n" RESET);
     printf(CYAN BOLD "\n🚀 Resolving dependencies...\n\n" RESET);
 
     resolve_dep(graph);
+  
+     
 
 
 
