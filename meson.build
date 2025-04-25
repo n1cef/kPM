@@ -70,6 +70,7 @@ endif
 # Define installation directories
 headers_dir = '/usr/kraken/include'
 scripts_dir = '/usr/kraken/scripts'
+
 bin_dir = '/usr/bin'
 metadata_dir = '/var/lib/kraken'
 db_dir='/var/lib/kraken/db'
@@ -96,7 +97,6 @@ scripts = files(
     'scripts/prepare.sh',
     'scripts/remove.sh',
     'scripts/test.sh',
-    'scripts/checkinstalled.sh',
     'scripts/getdeps.sh',
     'scripts/getversion.sh'
 )
@@ -110,6 +110,15 @@ src = files(
     'src/main.c',
     'src/conflict.c'
 )
+
+#source files for the checkinstalled executable
+ querry = files(
+   'querry/checkinstalled.c'
+  
+
+)
+
+
 
 db = files (
    'db/kraken.sql',
@@ -134,6 +143,13 @@ entropy_exec = executable(
     install_dir: bin_dir
 )
 
+checkinstalled_exec = executable(
+      'checkinstalled',
+     'querry/checkinstalled.c',
+     dependencies:[sqlite3],
+      install:true,
+      install_dir:bin_dir
+)
 
 install_data(
     'uninstall.sh',

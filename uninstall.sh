@@ -45,6 +45,7 @@ clean_symlinks=(
     "/usr/bin/kraken"
     "/usr/bin/entropy"
     "/usr/bin/kraken-uninstall"
+    "/usr/bin/checkinstalled"
 )
 
 for link in "${clean_symlinks[@]}"; do

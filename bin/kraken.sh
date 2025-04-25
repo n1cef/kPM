@@ -74,7 +74,7 @@ checkinstalled (){
 
     local pkgname="$1"
     local pkgver="$2"
- bash "$SCRIPTS_DIR/checkinstalled.sh" "$pkgname" "$pkgver"
+   /usr/bin/checkinstalled "$pkgname" "$pkgver"
 }
 
 
