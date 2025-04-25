@@ -143,10 +143,11 @@ entropy_exec = executable(
     install_dir: bin_dir
 )
 
+sqlite3_dep=dependency('sqlite3',required:true)
 checkinstalled_exec = executable(
       'checkinstalled',
-     'querry/checkinstalled.c',
-     dependencies:[sqlite3],
+     ['querry/checkinstalled.c'],
+     dependencies:[sqlite3_dep],
       install:true,
       install_dir:bin_dir
 )

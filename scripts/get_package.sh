@@ -78,8 +78,15 @@ get_package() {
 
 
 
-    echo "${BOLD}${CYAN}🔍 Checking installation status...${RESET}"
-    if ! sudo kraken checkinstalled "$pkgname"  "$version" >/dev/null 2>&1; then
+echo "${BOLD}${CYAN}🔍 Checking installation status...${RESET}"
+
+
+sudo kraken checkinstalled "$pkgname"  "$version"
+status =$?
+
+case (status) in
+   
+      1)
         echo "${BOLD}${YELLOW}⚠ WARNING: ${YELLOW}${pkgname} is alreadny istalled!${RESET}"
         echo "${BOLD}${YELLOW}⚠ HINT: \n
         you  can update the pacakge with sudo kraken update ${YELLOW}${pkgname} \n
@@ -87,15 +94,42 @@ get_package() {
                  sudo kraken remove ${YELLOW}${pkgname}\n
                  sudo kraken entoropy ${YELLOW}${pkgname}                 
         
-        " 
+        "
+	
         exit 1
-    else
-        echo "${BOLD}${GREEN}✅ ${YELLOW}${pkgname}${GREEN} is not installed. Proceeding...${RESET}"
+	;;
+          0)
+            echo "${BOLD}${GREEN}✅ ${YELLOW}${pkgname}${GREEN} is not installed. Proceeding...${RESET}"
 
-             
+     	  ;;             
+
+          2)
+              echo "Error: Invalid usage (e.g., missing arguments). please report to kaddechinn@gmai.com "
+
+	       exit 1
+        ;;
+	  
+        3)
+            echo "Error: Database file not found. please report to kaddechinn@gmai.com "
+	     exit 1
+        ;;
+        4)
+	    
+            echo "Error: SQL query failure or runtime error.  please report to kaddechinn@gmai.com"
+	     exit 1
+        ;;
+
+      *)
+          echo "Unknown error (exit code $status)."
+	  exit 1
+        ;;
+ esac
 
 
-    fi
+
+
+	  
+    
 
       echo "${BOLD}${CYAN}⌛ Preparing workspace...${RESET}"
     mkdir -p "$SOURCE_DIR/$pkgname" || {

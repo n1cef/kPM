@@ -88,6 +88,15 @@ int main(int argc , char *argv[]){
     sqlite3_finalize(stmt);
     sqlite3_close(db);
 
-    return exists ? 1 : 0;
- 
+   if (exists == 1) {
+    return 1;
+}
+
+   else if(exists == 0) {
+    return 0;
+}
+
+   
+
+   
 }
