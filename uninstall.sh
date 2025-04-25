@@ -30,6 +30,10 @@ clean_dirs=(
     "/sources/kraken" 
     "/tmp/kraken_strace.log"
     "/root/.cache/krakenpm"
+    "/usr/bin/kraken"
+    "/usr/bin/entropy"
+    "/usr/bin/kraken-uninstall"
+    "/usr/bin/checkinstalled"
 )
 
 
@@ -41,21 +45,23 @@ for path in "${clean_dirs[@]}"; do
 done
 
 
-clean_symlinks=(
-    "/usr/bin/kraken"
-    "/usr/bin/entropy"
-    "/usr/bin/kraken-uninstall"
-    "/usr/bin/checkinstalled"
-)
 
-for link in "${clean_symlinks[@]}"; do
-    if [ -L "$link" ]; then
-        echo "Removing symlink: $link"
-        rm -Rf "$link"
+# TBD: WE NEED TO HANDLE THIS SHIT LATER  SYMILINKSPROBLEM (he cant detect entropy and kraken and kraken uninstall ) 
+#clean_symlinks=(
+ #   "/usr/bin/kraken"
+  #  "/usr/bin/entropy"
+   # "/usr/bin/kraken-uninstall"
+   # "/usr/bin/checkinstalled"
+#)
+
+#for link in "${clean_symlinks[@]}"; do
+ #   if [ -L "$link" ]; then
+  #      echo "Removing symlink: $link"
+   #     rm -Rf "$link"
     
-    else
-	rm -Rf "$link"
-    fi
-done
+   # else
+#	rm -Rf "$link"
+ #   fi
+#done
 
 echo "✓ Kraken fully uninstalled"

@@ -81,10 +81,10 @@ get_package() {
 echo "${BOLD}${CYAN}🔍 Checking installation status...${RESET}"
 
 
-sudo kraken checkinstalled "$pkgname"  "$version"
-status =$?
+ sudo kraken checkinstalled "$pkgname"  "$version"
+status=$?
 
-case (status) in
+case $status in
    
       1)
         echo "${BOLD}${YELLOW}⚠ WARNING: ${YELLOW}${pkgname} is alreadny istalled!${RESET}"
@@ -120,7 +120,7 @@ case (status) in
         ;;
 
       *)
-          echo "Unknown error (exit code $status)."
+          echo "Unknown error (exit code )."
 	  exit 1
         ;;
  esac

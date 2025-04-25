@@ -58,10 +58,10 @@ int main(int argc , char *argv[]){
 
  //prepare the sql statement with the package and version parameters
 
- const char *sql = "SELECT 1 FORM packages "
+ const char *sql = "SELECT 1 FROM packages "
                      " WHERE name = ? "
-                       " AND  version = ? "
-   " AND installed = 1; ";
+                     " AND  version = ? "
+                     " AND installed = 1; ";
                
  sqlite3_stmt *stmt;
  rc= sqlite3_prepare_v2(db,sql,-1,&stmt,NULL);
@@ -96,7 +96,7 @@ int main(int argc , char *argv[]){
     return 0;
 }
 
-   
+   //TBD: handle the other return 2 , 3 , 4     
 
    
 }
