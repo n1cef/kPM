@@ -25,6 +25,7 @@ void resolve_dep(Graph *graph)
 
     if(!graph->node_array[i]->visited){
 
+      
       install_pkg_dfs(graph->node_array[i]);
     }
  
@@ -60,8 +61,8 @@ void install_pkg_dfs(Node *node){
 
 
   // Download  the package in /sources
-  snprintf(command, sizeof(command),"sudo kraken download %s",node->pkg_name);
-  system(command);
+   snprintf(command, sizeof(command),"sudo kraken download %s",node->pkg_name);
+    system(command);
 
 
   // Prepare for the build

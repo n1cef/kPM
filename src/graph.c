@@ -82,7 +82,7 @@ for (i=0;i<graph->nbr_node;i++){
 int j;
 for (j=0;j<graph->nbr_node;j++){
 
-    if (check_dfs_cycle(graph->node_array[i])){
+    if (check_dfs_cycle(graph->node_array[j])){
         return true;
     }
 
@@ -149,3 +149,35 @@ return NULL;
 
 
 }
+
+
+void print_graph(Graph *graph){
+
+  printf("\n=== Graph Structure ===\n");
+   printf("Total nodes: %d\n", graph->nbr_node);
+ 
+   for (int i=0;i<graph->nbr_node;i++){
+
+     Node *current=graph->node_array[i];
+     printf("\n node  %d : %s %s ",i+1,current->pkg_name,current->version);
+     printf("dependency (%d) \n" , current->nbr_dep);
+
+
+     for (int j =0 ; j<current->nbr_dep;j++){
+  
+       printf("%s %s \n" ,current->dep_array[j]->pkg_name,current->dep_array[j]->version);         
+
+     }
+     
+    
+
+
+   }
+   printf("\n");
+
+
+
+
+
+}
+

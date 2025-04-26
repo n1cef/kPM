@@ -32,7 +32,7 @@ void free_graph(Graph * graph);
 bool has_cycle(Graph * graph);
 bool check_dfs_cycle(Node * node );
 Node * find_node_by_packages_name_and_version(Graph * graph , const char * pkgname , const char * version);
-
+void print_graph(Graph *graph);
 
 
 #endif
