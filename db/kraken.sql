@@ -5,7 +5,7 @@ CREATE TABLE packages (
     category TEXT NOT NULL,
     installed INTEGER DEFAULT 0,
     date DATETIME ,
-    UNIQUE(name, version)  -- Prevent duplicate versions
+    UNIQUE(name, version)  
 );
 
 CREATE TABLE installation_steps (
