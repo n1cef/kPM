@@ -99,7 +99,7 @@ bool check_installed(const char * pkgname, const char *version ){
 
   char check_cmd[256];
   sprintf(check_cmd,"sudo kraken checkinstalled %s %s ", pkgname
-	  , version);
+	 , version);
   
   //TBD:IF checkinstalled return 1 mean the package installed so return 1 and if return 0  mean not installed and must bereutn 0
 
@@ -116,8 +116,3 @@ bool check_installed(const char * pkgname, const char *version ){
   return false ;
 
 }
-
-
-
-
-
