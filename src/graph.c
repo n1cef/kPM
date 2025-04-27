@@ -151,32 +151,33 @@ return NULL;
 }
 
 
-void print_graph(Graph *graph){
-
-  printf("\n=== Graph Structure ===\n");
-   printf("Total nodes: %d\n", graph->nbr_node);
- 
-   for (int i=0;i<graph->nbr_node;i++){
-
-     Node *current=graph->node_array[i];
-     printf("\n node  %d : %s %s ",i+1,current->pkg_name,current->version);
-     printf("dependency (%d) \n" , current->nbr_dep);
-
-
-     for (int j =0 ; j<current->nbr_dep;j++){
-  
-       printf("%s %s \n" ,current->dep_array[j]->pkg_name,current->dep_array[j]->version);         
-
-     }
-     
+void print_graph(Graph *graph) {
+    printf("\n╔══════════════════════════════╗");
+    printf("\n║        Package Graph         ║");
+    printf("\n╚══════════════════════════════╝");
+    printf("\n Total nodes: %d\n", graph->nbr_node);
     
-
-
-   }
-   printf("\n");
-
-
-
-
-
+    for (int i = 0; i < graph->nbr_node; i++) {
+        Node *current = graph->node_array[i];
+        
+        // Node header
+        printf("\n┌────────────────────────────────────┐");
+        printf("\n│ ● %-20s %-8s │", 
+              current->pkg_name, current->version);
+        printf("\n├────────────────────────────────────┤");
+        
+        // Dependencies list
+        if (current->nbr_dep > 0) {
+            printf("\n│ Dependencies:                     │");
+            for (int j = 0; j < current->nbr_dep; j++) {
+                printf("\n│  ↳ %-20s %-8s │", 
+                      current->dep_array[j]->pkg_name,
+                      current->dep_array[j]->version);
+            }
+        } else {
+            printf("\n│        (No dependencies)          │");
+        }
+        printf("\n└────────────────────────────────────┘");
+    }
+    printf("\n\n");
 }

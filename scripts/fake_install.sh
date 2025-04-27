@@ -178,7 +178,8 @@ fi
    
     [ ! -s "$files_list" ] && {
         printf "${BOLD}${RED}✗ No files recorded in manifest${RESET}\n" >&2
-        return 1
+        printf "${BOLD}${RED}✗ we cant remove the file manually !${RESET}\n" >&2
+         printf "${BOLD}${RED}✗ TBD: we need to create a mecanism for pre binary packages specially microsoft shit like vscode ${RESET}\n" >&2
     }
 
     
