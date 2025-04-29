@@ -1,0 +1,37 @@
+# ##############################################################################
+#                                                                              #
+#   ██╗  ██╗██████╗  █████╗ ██╗  ██╗███████╗███╗   ██╗                         #
+#   ██║ ██╔╝██╔══██╗██╔══██╗██║ ██╔╝██╔════╝████╗  ██║                         #
+#   █████╔╝ ██████╔╝███████║█████╔╝ █████╗  ██╔██╗ ██║                         #
+#   ██╔═██╗ ██╔══██╗██╔══██║██╔═██╗ ██╔══╝  ██║╚██╗██║                         #
+#   ██║  ██╗██║  ██║██║  ██║██║  ██╗███████╗██║ ╚████║                         #
+#   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝                         #
+#                                                                              #
+#  Autocompletion Script for the Kraken Package Manager                        #
+#                                                                              #
+#                                                                              #
+#  Author:   nacef kaddechi                                                    #
+#  Date:     April 30, 2025                                                    #
+#  Version:  1.0.0                                                             #
+#                                                                              #
+#  Description:                                                                #
+#  Enables tab-autocompletion for Kraken subcommands.                          #
+#  Supported commands: download, prepare, build, test, install, remove, etc.   #
+#                                                                              #
+#  Installation:                                                               #
+#  Place this file in ~/.bash_completion/kraken and source it in ~/.bashrc.    #
+#                                                                              #
+# ##############################################################################
+
+
+_kraken_completions() {
+	    local subcommands=(
+	    download prepare build 'test' preinstall install
+            postinstall remove manual_remove entropy checkinstalled
+     
+        )
+				    
+   local cur=${COMP_WORDS[COMP_CWORD]}        
+   COMPREPLY=($(compgen -W "${subcommands[*]}" -- "$cur")) 
+}
+   complete -F _kraken_completions kraken
