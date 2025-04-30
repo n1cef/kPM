@@ -7,55 +7,94 @@ GREEN=$(tput setaf 2)
 YELLOW=$(tput setaf 3)
 BLUE=$(tput setaf 4)
 CYAN=$(tput setaf 6)
+MAGENTA=$(tput setaf 5)
 RESET=$(tput sgr0)
 
 
 SCRIPTS_DIR="/usr/kraken/scripts"
 
 print_help() {
-    echo "${BOLD}${CYAN}Kraken Package Manager - Usage Guide${RESET}"
-    echo "=============================================="
-    
-    echo "${BOLD}${GREEN}Usage:${RESET}"
-    echo "  kraken ${YELLOW}<command>${RESET} ${BLUE}[package_name]${RESET}"
+    clear
+    # Custom "KRAKEN" ASCII Art with Package Manager Theme
+    echo "${BOLD}${CYAN}"
+    echo '  ██   ██ ██████   █████  ██   ██ ███████ ███    ██ '
+    echo '  ██  ██  ██   ██ ██   ██ ██  ██  ██      ████   ██ '
+    echo '  █████   ██████  ███████ █████   █████   ██ ██  ██ '
+    echo '  ██  ██  ██   ██ ██   ██ ██  ██  ██      ██  ██ ██ '
+    echo '  ██   ██ ██   ██ ██   ██ ██   ██ ███████ ██   ████ '
+    echo "${BOLD}${BLUE}"
+    echo '  ┌───────────────────────────────────────────────┐'
+    echo '  │  ░▒▓█████▓▒░ ░▒▓██████▓▒  ░▒▓█▓▒░ ░▒▓████▓▒░  │'
+    echo '  └───────────────────────────────────────────────┘'
+    echo "${BOLD}${GREEN}         Modular Dependency Resolving Package System${RESET}"
     echo ""
     
-    echo "${BOLD}${GREEN}Available Commands:${RESET}"
-    echo "  ${YELLOW}download${RESET}    - Download package sources"
-    echo "  ${YELLOW}prepare${RESET}     - Prepare build environment"
-    echo "  ${YELLOW}build${RESET}       - Compile the package"
-    echo "  ${YELLOW}test${RESET}        - Run package tests"
-    echo "  ${YELLOW}preinstall${RESET}  - Pre-installation checks"
-    echo "  ${YELLOW}fakeinstall${RESET}  - Detect package files and directories "
-    echo "  ${YELLOW}install${RESET}     - Install the package"
-    echo "  ${YELLOW}postinstall${RESET} - Post-installation tasks"
-    echo "  ${YELLOW}remove${RESET}      - Uninstall the package"
-    echo "  ${YELLOW}listdependency${RESET} - Display package dependency tree"
-    echo "  ${YELLOW}checkinstalled${RESET}      - Verify package installation statu "
+    echo "${BOLD}${CYAN}═════════════════════════════════════════════════════════════════════════${RESET}"
+   
+   
+    echo "${BOLD}${GREEN}${BOLD}🌀 Usage:${RESET}"
+    echo "  ${BOLD}kraken ${YELLOW}<command>${RESET} ${BLUE}[package_name]${RESET}\n"
     
-    echo "  ${YELLOW}entropy${RESET}     - Resolve Dependency Tree & Build from Source"
-    echo ""
-    
-    echo "${BOLD}${GREEN}Examples:${RESET}"
-    echo "  ${CYAN}Install a package:${RESET}"
-    echo "  kraken ${YELLOW}install${RESET} ${BLUE}my-awesome-app${RESET}"
-    echo ""
-    echo "  ${CYAN}Build and test:${RESET}"
-    echo "  kraken ${YELLOW}build${RESET} ${BLUE}my-library${RESET} && kraken ${YELLOW}test${RESET} ${BLUE}my-library${RESET}"
-    echo ""
-    echo "  ${CYAN}Full workflow:${RESET}"
-    echo "  kraken ${YELLOW}download${RESET} ${BLUE}cool-package${RESET} && "
-    echo "  kraken ${YELLOW}prepare${RESET} ${BLUE}cool-package${RESET} && "
-    echo "  kraken ${YELLOW}build${RESET} ${BLUE}cool-package${RESET} && "
-    echo "  kraken ${YELLOW}test${RESET} ${BLUE}cool-package${RESET} && "
-    echo "  kraken ${YELLOW}preinstall${RESET} ${BLUE}cool-package${RESET} && "
-    echo "  kraken ${YELLOW}faceinstall${RESET} ${BLUE}cool-package${RESET}"
-    echo "  kraken ${YELLOW}install${RESET} ${BLUE}cool-package${RESET}"
-    echo "  kraken ${YELLOW}postinstall${RESET} ${BLUE}cool-package${RESET}&& "
+   echo ""
+   echo ""
+   echo ""
+    echo "${BOLD}${GREEN}${BOLD}🐙 Available Commands:${RESET}"
+    printf "  ${YELLOW}%-12s${RESET} %s ${BOLD}${MAGENTA}➤${RESET} %s\n" \
+      "download"    "📥" "Download package sources" \
+      "prepare"     "🛠 " "Prepare build environment" \
+      "build"       "🔨" "Compile the package" \
+      "test"        "🧪" "Run package tests" \
+      "preinstall"  "🔍" "Pre-installation checks" \
+      "fakeinstall" "👻" "Detect package files/directories" \
+      "install"     "📦" "Install the package" \
+      "postinstall" "✅" "Post-installation tasks" \
+      "remove"      "🗑 " "Uninstall the package" \
+      "getdeps"     "🌳" "Display dependency tree (name+version)" \
+      "checkinstalled" "🔎" "Verify installation (1=installed, 0=not)" \
+      "getversion"  "🏷 " "Return package version" \
+      "entropy"     "🌊" "Resolve Dependencies & Build from Source"
 
-    echo ""
+   
+   echo ""
+   echo ""
+    echo "${BOLD}${GREEN}${BOLD}🌐 Examples:${RESET}"
+    echo "${CYAN}${BOLD}⚓ Install a package:${RESET}"
+    echo "  kraken ${YELLOW}install${RESET} ${BLUE}my-awesome-app${RESET}\n"
+    
+    echo "${CYAN}${BOLD}⚡ Build and test:${RESET}"
+    echo "  kraken ${YELLOW}build${RESET} ${BLUE}my-library${RESET} && kraken ${YELLOW}test${RESET} ${BLUE}my-library${RESET}\n"
+    
+echo ""
+echo ""
+echo "${CYAN}${BOLD}🚀 Full Workflow (Manual):${RESET}"
+echo "${BOLD}${BLUE}"
+echo '  ┌───⋄──────────────────────────────────────────⋄───┐'
+echo -e "  │  ${BLUE}sudo ${CYAN}kraken ${YELLOW}download ${MAGENTA}cool-package${BLUE}               │"
+echo -e "  │  ${BLUE}sudo ${CYAN}kraken ${YELLOW}prepare ${MAGENTA}cool-package${BLUE}                │"
+echo -e "  │  ${BLUE}sudo ${CYAN}kraken ${YELLOW}build ${MAGENTA}cool-package${BLUE}                  │"
+echo -e "  │  ${BLUE}sudo ${CYAN}kraken ${YELLOW}test ${MAGENTA}cool-package${BLUE}                   │"
+echo -e "  │  ${BLUE}sudo ${CYAN}kraken ${YELLOW}preinstall ${MAGENTA}cool-package${BLUE}             │"
+echo -e "  │  ${BLUE}sudo ${CYAN}kraken ${YELLOW}fakeinstall ${MAGENTA}cool-package${BLUE}            │"
+echo -e "  │  ${BLUE}sudo ${CYAN}kraken ${YELLOW}install ${MAGENTA}cool-package${BLUE}                │"
+echo -e "  │  ${BLUE}sudo ${CYAN}kraken ${YELLOW}postinstall ${MAGENTA}cool-package${BLUE}            │"  
+echo '  └───⋄──────────────────────────────────────────⋄───┘'
+echo "${RESET}"
 
-    echo "  kraken ${YELLOW}remove${RESET} ${BLUE}cool-package${RESET}&& "
+echo ""
+
+echo "${CYAN}${BOLD}🚀 Full Workflow (Automatic):${RESET}"
+echo "${BOLD}${BLUE}"
+echo '  ┌───⋄──────────────────────────────────────────⋄───┐'
+echo -e "  │  ${BLUE}sudo ${CYAN}kraken ${YELLOW}entropy ${MAGENTA}cool-package${BLUE}                │"
+echo '  └───⋄──────────────────────────────────────────⋄───┘'
+echo "${RESET}"
+
+
+
+
+
+
+
 
 
 
